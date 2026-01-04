@@ -10,6 +10,10 @@ const ProductCard = ({ product }) => {
     const handleAddToCart = (e) => {
         e.preventDefault();
         e.stopPropagation();
+        if (product.stock <= 0) {
+            toast.error('Sorry, this item is out of stock!');
+            return;
+        }
         addToCart(product);
         toast.success(`${product.name} added to cart!`);
     };
@@ -61,7 +65,7 @@ const ProductCard = ({ product }) => {
                 <div className="flex items-center justify-between">
                     <span className="text-xl font-bold text-brand-blue-dark">Rs. {product.price.toLocaleString()}</span>
                     <div className="flex items-center text-xs text-brand-dark/50">
-                        <span className="text-brand-pink-dark mr-1">★</span> {product.rating || 5.0}
+                        <span className="text-brand-pink-dark mr-1">★</span> {product.rating > 0 ? product.rating.toFixed(1) : 'New'}
                     </div>
                 </div>
                 <p className="text-sm text-brand-dark/60 line-clamp-2 leading-relaxed">

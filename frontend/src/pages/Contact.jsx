@@ -1,5 +1,5 @@
 import { FiMail, FiPhone, FiMapPin, FiInstagram } from 'react-icons/fi';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FaWhatsapp, FaFacebook } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import api from '../api/client';
 
@@ -70,7 +70,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <h4 className="font-bold text-brand-dark">Our Studio</h4>
-                                    <p className="text-brand-dark/60">123 Creative Lane, Artisan Village, Colombo 07, Sri Lanka</p>
+                                    <p className="text-brand-dark/60">173/B Madurankuliya Puttalam Sri Lanka</p>
                                 </div>
                             </div>
 
@@ -90,7 +90,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <h4 className="font-bold text-brand-dark">Call Us</h4>
-                                    <p className="text-brand-dark/60">+94 77 123 4567</p>
+                                    <p className="text-brand-dark/60">+94760601163</p>
                                 </div>
                             </div>
                         </div>
@@ -98,17 +98,24 @@ const Contact = () => {
                         <div className="space-y-4 pt-12 border-t border-brand-pink/10">
                             <h4 className="font-bold text-brand-dark uppercase tracking-widest text-xs">Follow Our Journey</h4>
                             <div className="flex space-x-6 text-3xl text-brand-blue-dark">
-                                <a href="#" className="hover:text-brand-pink-dark transition-all duration-300 hover:scale-110"><FiInstagram /></a>
-                                <a href="https://wa.me/+94771234567" target="_blank" rel="noopener noreferrer" className="hover:text-green-500 transition-all duration-300 hover:scale-110"><FaWhatsapp /></a>
+                                <a href="https://www.facebook.com/profile.php?id=61571315741297" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition-all duration-300 hover:scale-110"><FaFacebook /></a>
+                                <a href="https://www.instagram.com/homeheartcreation/?igsh=Y3RydDRhbmVkdzhv#" target="_blank" rel="noopener noreferrer" className="hover:text-brand-pink-dark transition-all duration-300 hover:scale-110"><FiInstagram /></a>
+                                <a href="https://wa.me/94760601163?text=Hello%20HomeHeartCreation" target="_blank" rel="noopener noreferrer" className="hover:text-green-500 transition-all duration-300 hover:scale-110"><FaWhatsapp /></a>
                             </div>
                         </div>
 
-                        {/* Map Placeholder */}
-                        <div className="h-64 rounded-3xl bg-brand-card border-2 border-dashed border-brand-border flex items-center justify-center text-brand-dark/40 overflow-hidden relative shadow-inner">
-                            <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=800" alt="Map" className="w-full h-full object-cover opacity-30 grayscale" />
-                            <div className="absolute inset-0 flex items-center justify-center bg-brand-card/20 backdrop-blur-[2px]">
-                                <span className="font-bold text-brand-dark italic bg-brand-card px-6 py-2 rounded-full shadow-lg border border-brand-border">Find us on Google Maps</span>
-                            </div>
+                        {/* Google Maps */}
+                        <div className="h-64 rounded-3xl overflow-hidden shadow-lg border border-brand-border">
+                            <iframe
+                                src="https://maps.google.com/maps?q=7.907996,79.801420&hl=en&z=15&output=embed"
+                                width="100%"
+                                height="100%"
+                                style={{ border: 0 }}
+                                allowFullScreen=""
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                                title="HomeHeartCreation Location"
+                            ></iframe>
                         </div>
                     </div>
                 </div>

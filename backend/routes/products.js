@@ -15,7 +15,20 @@ router.get('/', async (req, res) => {
 
         // Category filter
         if (category) {
-            query.category = category;
+            // Check if category is a valid ObjectId
+            if (category.match(/^[0-9a-fA-F]{24}$/)) {
+                query.category = category;
+            } else {
+                // If not an ObjectId, find category by name
+                const CategoryModel = require('../models/Category');
+                const cat = await CategoryModel.findOne({ name: { $regex: new RegExp(`^${category}$`, 'i') } });
+                if (cat) {
+                    query.category = cat._id;
+                } else {
+                    // If category not found by name, return empty array
+                    return res.json([]);
+                }
+            }
         }
 
         // Search filter
@@ -162,6 +175,88 @@ router.delete('/:id', protect, admin, async (req, res) => {
         if (product) {
             await product.deleteOne();
             res.json({ message: 'Product removed' });
+        } else {
+            res.status(404).json({ message: 'Product not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// @route   POST /api/products/:id/reviews
+// @desc    Create new review
+// @access  Public
+router.post('/:id/reviews', async (req, res) => {
+    try {
+        const { rating, comment, name } = req.body;
+        const product = await Product.findById(req.params.id);
+
+        if (product) {
+            const review = {
+                name: name || 'Anonymous',
+                rating: Number(rating),
+                comment,
+            };
+
+            product.reviews.push(review);
+            product.numReviews = product.reviews.length;
+            product.rating =
+                product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+                product.reviews.length;
+
+            await product.save();
+            res.status(201).json({ message: 'Review added' });
+        } else {
+            res.status(404).json({ message: 'Product not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// @route   GET /api/products/reviews/all
+// @desc    Get all reviews (Admin only)
+// @access  Private/Admin
+router.get('/reviews/all', protect, admin, async (req, res) => {
+    try {
+        const products = await Product.find({}).select('name reviews');
+        const allReviews = products.reduce((acc, product) => {
+            const productReviews = product.reviews.map(review => ({
+                ...review.toObject(),
+                productId: product._id,
+                productName: product.name
+            }));
+            return [...acc, ...productReviews];
+        }, []);
+
+        // Sort by date newest first
+        allReviews.sort((a, b) => b.createdAt - a.createdAt);
+
+        res.json(allReviews);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// @route   DELETE /api/products/:id/reviews/:reviewId
+// @desc    Delete a review
+// @access  Private/Admin
+router.delete('/:id/reviews/:reviewId', protect, admin, async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (product) {
+            product.reviews = product.reviews.filter(
+                (review) => review._id.toString() !== req.params.reviewId
+            );
+            product.numReviews = product.reviews.length;
+            product.rating =
+                product.reviews.length > 0
+                    ? product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+                    product.reviews.length
+                    : 0;
+
+            await product.save();
+            res.json({ message: 'Review removed' });
         } else {
             res.status(404).json({ message: 'Product not found' });
         }

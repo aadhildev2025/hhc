@@ -17,9 +17,22 @@ export const CartProvider = ({ children }) => {
     const addToCart = (product, quantity = 1) => {
         setCartItems((prevItems) => {
             const existItem = prevItems.find((x) => x._id === product._id);
+            const currentQty = existItem ? existItem.quantity : 0;
+            const newQty = currentQty + quantity;
+
+            if (newQty > product.stock) {
+                const allowedQty = product.stock - currentQty;
+                if (allowedQty <= 0) {
+                    return prevItems;
+                }
+                return prevItems.map((x) =>
+                    x._id === product._id ? { ...x, quantity: product.stock } : x
+                );
+            }
+
             if (existItem) {
                 return prevItems.map((x) =>
-                    x._id === product._id ? { ...x, quantity: x.quantity + quantity } : x
+                    x._id === product._id ? { ...x, quantity: newQty } : x
                 );
             } else {
                 return [...prevItems, { ...product, quantity }];
@@ -33,7 +46,13 @@ export const CartProvider = ({ children }) => {
 
     const updateQuantity = (id, quantity) => {
         setCartItems((prevItems) =>
-            prevItems.map((x) => (x._id === id ? { ...x, quantity: Math.max(1, quantity) } : x))
+            prevItems.map((x) => {
+                if (x._id === id) {
+                    const finalQty = Math.min(x.stock, Math.max(1, quantity));
+                    return { ...x, quantity: finalQty };
+                }
+                return x;
+            })
         );
     };
 

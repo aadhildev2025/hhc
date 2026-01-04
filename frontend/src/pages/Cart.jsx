@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 import { FiTrash2, FiMinus, FiPlus, FiArrowRight, FiShoppingBag } from 'react-icons/fi';
+import { toast } from 'react-hot-toast';
 
 const Cart = () => {
     const { cartItems, removeFromCart, updateQuantity, cartTotal } = useCart();
@@ -74,7 +75,13 @@ const Cart = () => {
                                         </button>
                                         <span className="px-4 font-bold text-brand-dark text-sm">{item.quantity}</span>
                                         <button
-                                            onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                                            onClick={() => {
+                                                if (item.quantity < item.stock) {
+                                                    updateQuantity(item._id, item.quantity + 1);
+                                                } else {
+                                                    toast.error('Maximum stock reached');
+                                                }
+                                            }}
                                             className="px-3 h-full hover:bg-brand-pink/10 shadow-sm transition-all cursor-pointer"
                                         >
                                             <FiPlus className="text-xs" />

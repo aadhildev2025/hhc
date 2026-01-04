@@ -40,7 +40,7 @@ const Navbar = () => {
                     <Link to="/" className="text-xl md:text-2xl font-serif font-bold tracking-tight">
                         <span className="text-brand-pink-dark">Home</span>
                         <span className="text-brand-blue-dark">Heart</span>
-                        <span className="text-brand-pink-dark/50 hidden sm:inline">Creation</span>
+                        <span className="text-brand-pink-dark/50">Creation</span>
                     </Link>
 
                     {/* Desktop Navigation */}

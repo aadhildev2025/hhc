@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api/client';
 import { useCart } from '../context/CartContext.jsx';
-import { FiShoppingCart, FiHeart, FiArrowLeft, FiTruck, FiRefreshCw, FiShield } from 'react-icons/fi';
+import { FiShoppingCart, FiHeart, FiArrowLeft, FiTruck, FiRefreshCw, FiShield, FiStar, FiEdit3 } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
+import ReviewModal from '../components/ReviewModal';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -13,25 +14,31 @@ const ProductDetails = () => {
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
     const [activeImage, setActiveImage] = useState('');
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+
+    const fetchProduct = async () => {
+        try {
+            const { data } = await api.get(`/products/${id}`);
+            setProduct(data);
+            setActiveImage(data.image);
+        } catch (error) {
+            console.error('Error fetching product:', error);
+            toast.error('Product not found');
+            navigate('/shop');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const { data } = await api.get(`/products/${id}`);
-                setProduct(data);
-                setActiveImage(data.image);
-            } catch (error) {
-                console.error('Error fetching product:', error);
-                toast.error('Product not found');
-                navigate('/shop');
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchProduct();
     }, [id, navigate]);
 
     const handleAddToCart = () => {
+        if (product.stock <= 0) {
+            toast.error('Sorry, this item is out of stock!');
+            return;
+        }
         addToCart(product, quantity);
         toast.success(`${product.name} added to cart!`);
     };
@@ -90,7 +97,9 @@ const ProductDetails = () => {
                                 <span className="text-3xl font-bold text-brand-blue-dark">Rs. {product.price.toLocaleString()}</span>
                                 <div className="flex items-center text-sm text-brand-dark/40">
                                     <span className="text-brand-pink-dark mr-1 text-lg">★</span>
-                                    <span className="font-bold text-brand-dark mr-1">{product.rating || 5.0}</span>
+                                    <span className="font-bold text-brand-dark mr-1">
+                                        {product.rating > 0 ? product.rating.toFixed(1) : 'New'}
+                                    </span>
                                     ({product.numReviews || 0} reviews)
                                 </div>
                             </div>
@@ -111,7 +120,7 @@ const ProductDetails = () => {
                                     </button>
                                     <span className="px-6 font-bold text-brand-dark text-lg">{quantity}</span>
                                     <button
-                                        onClick={() => setQuantity(quantity + 1)}
+                                        onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
                                         className="px-6 h-full hover:bg-brand-pink/10 transition-colors text-xl"
                                     >
                                         +
@@ -164,9 +173,62 @@ const ProductDetails = () => {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Reviews Section */}
+                        <div className="pt-12 border-t border-brand-border space-y-8">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-2xl font-serif text-brand-dark">Customer Reviews</h3>
+                                <button
+                                    onClick={() => setIsReviewModalOpen(true)}
+                                    className="flex items-center space-x-2 text-brand-pink-dark font-bold hover:bg-brand-pink/10 px-4 py-2 rounded-xl transition-all"
+                                >
+                                    <FiEdit3 /> <span>Write a Review</span>
+                                </button>
+                            </div>
+
+                            {product.reviews && product.reviews.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {product.reviews.map((review, i) => (
+                                        <div key={i} className="p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-brand-pink/10 space-y-4">
+                                            <div className="flex items-center justify-between">
+                                                <h4 className="font-bold text-brand-dark">{review.name}</h4>
+                                                <div className="flex text-brand-pink-dark text-xs">
+                                                    {[...Array(5)].map((_, i) => (
+                                                        <FiStar key={i} className={i < review.rating ? 'fill-brand-pink-dark' : 'text-brand-dark/10'} />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            <p className="text-sm text-brand-dark/70 leading-relaxed italic">
+                                                "{review.comment}"
+                                            </p>
+                                            <p className="text-[10px] text-brand-dark/30 uppercase tracking-widest font-bold">
+                                                {new Date(review.createdAt).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="p-12 text-center bg-brand-pink/5 rounded-3xl border border-brand-pink/10 border-dashed">
+                                    <p className="text-brand-dark/40 mb-4 italic">No reviews yet. Be the first to share your thoughts!</p>
+                                    <button
+                                        onClick={() => setIsReviewModalOpen(true)}
+                                        className="text-brand-pink-dark font-bold hover:underline"
+                                    >
+                                        Leave a review
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <ReviewModal
+                isOpen={isReviewModalOpen}
+                onClose={() => setIsReviewModalOpen(false)}
+                productId={product._id}
+                onReviewAdded={fetchProduct}
+            />
         </div>
     );
 };

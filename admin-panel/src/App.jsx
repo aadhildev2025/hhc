@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
 import Orders from './pages/Orders';
 import Messages from './pages/Messages';
+import Reviews from './pages/Reviews';
 import Settings from './pages/Settings';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="products" element={<Products />} />
                     <Route path="orders" element={<Orders />} />
+                    <Route path="reviews" element={<Reviews />} />
                     <Route path="messages" element={<Messages />} />
                     <Route path="settings" element={<Settings />} />
                 </Route>

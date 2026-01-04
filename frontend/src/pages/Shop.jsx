@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import api from '../api/client';
 import ProductCard from '../components/ProductCard';
-import { FiFilter, FiSearch, FiX } from 'react-icons/fi';
+import { FiFilter, FiSearch, FiX, FiChevronDown } from 'react-icons/fi';
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
@@ -14,6 +14,13 @@ const Shop = () => {
     const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
     const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
     const [showFilters, setShowFilters] = useState(false);
+    const [sortByOpen, setSortByOpen] = useState(false);
+
+    const sortOptions = [
+        { id: 'newest', label: 'Newest First' },
+        { id: 'price-asc', label: 'Price: Low to High' },
+        { id: 'price-desc', label: 'Price: High to Low' }
+    ];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -101,7 +108,7 @@ const Shop = () => {
                                     <button
                                         key={cat._id}
                                         onClick={() => setSelectedCategory(cat._id)}
-                                        className={`w-full text-left px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${selectedCategory === cat._id ? 'bg-brand-pink-dark text-white shadow-md' : 'hover:bg-brand-pink/10 text-brand-dark/70'}`}
+                                        className={`w-full text-left px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${selectedCategory === cat._id || selectedCategory === cat.name ? 'bg-brand-pink-dark text-white shadow-md' : 'hover:bg-brand-pink/10 text-brand-dark/70'}`}
                                     >
                                         {cat.name}
                                     </button>
@@ -111,15 +118,42 @@ const Shop = () => {
 
                         <div className="space-y-6">
                             <h3 className="font-bold text-brand-dark uppercase tracking-widest text-sm">Sort By</h3>
-                            <select
-                                className="w-full p-3 bg-brand-card border border-brand-border rounded-xl focus:outline-none text-brand-dark"
-                                value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value)}
-                            >
-                                <option value="newest">Newest First</option>
-                                <option value="price-asc">Price: Low to High</option>
-                                <option value="price-desc">Price: High to Low</option>
-                            </select>
+                            <div className="relative">
+                                <button
+                                    onClick={() => setSortByOpen(!sortByOpen)}
+                                    className="w-full flex items-center justify-between p-4 bg-brand-card border border-brand-border rounded-2xl text-brand-dark group hover:border-brand-pink-dark/30 transition-all duration-300 gap-2"
+                                >
+                                    <span className="font-medium whitespace-nowrap overflow-hidden text-ellipsis text-left flex-grow">
+                                        {sortOptions.find(opt => opt.id === sortBy)?.label || 'Newest First'}
+                                    </span>
+                                    <FiChevronDown className={`transition-transform duration-300 shrink-0 ${sortByOpen ? 'rotate-180' : ''} text-brand-pink-dark`} />
+                                </button>
+
+                                {sortByOpen && (
+                                    <>
+                                        <div
+                                            className="fixed inset-0 z-10"
+                                            onClick={() => setSortByOpen(false)}
+                                        ></div>
+                                        <div className="absolute top-full left-0 w-full mt-2 bg-brand-card border border-brand-border rounded-2xl shadow-xl z-20 overflow-hidden animate-slide-up py-2 backdrop-blur-xl bg-white/90">
+                                            {sortOptions.map((option) => (
+                                                <button
+                                                    key={option.id}
+                                                    onClick={() => {
+                                                        setSortBy(option.id);
+                                                        setSortByOpen(false);
+                                                    }}
+                                                    className={`w-full text-left px-6 py-3 text-sm transition-all duration-200 whitespace-nowrap ${sortBy === option.id
+                                                        ? 'text-brand-pink-dark font-bold bg-brand-pink/5'
+                                                        : 'text-brand-dark/70 hover:bg-brand-pink/5 hover:text-brand-pink-dark'}`}
+                                                >
+                                                    {option.label}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </aside>
 

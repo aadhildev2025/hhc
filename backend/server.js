@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const connectDB = require('./config/db');
@@ -14,7 +15,7 @@ const messageRoutes = require('./routes/messages');
 const notificationRoutes = require('./routes/notifications');
 
 // Connect to database
-connectDB();
+// Redundant call removed
 
 const app = express();
 
@@ -36,7 +37,13 @@ app.use('/api/notifications', notificationRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'OK', message: 'HomeHeartCreation API is running' });
+    const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
+    res.json({
+        status: dbStatus === 'Connected' ? 'OK' : 'DEGRADED',
+        database: dbStatus,
+        message: 'HomeHeartCreation API is running',
+        whitelisting_ip: '112.134.192.124'
+    });
 });
 
 // Error handling middleware
@@ -47,6 +54,19 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const startServer = async () => {
+    try {
+        await connectDB();
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error('CRITICAL: Server failed to start:', error);
+        // Still listen so we don't get connection refused
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT} (DATABASE OFFLINE)`);
+        });
+    }
+};
+
+startServer();

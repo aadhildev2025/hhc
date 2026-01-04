@@ -172,4 +172,22 @@ router.put('/profile/password', protect, async (req, res) => {
     }
 });
 
+// @route   POST /api/auth/profile/password/verify
+// @desc    Verify current password
+// @access  Private
+router.post('/profile/password/verify', protect, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (user) {
+            const { password } = req.body;
+            const isMatch = await user.matchPassword(password);
+            res.json({ verified: isMatch });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = router;

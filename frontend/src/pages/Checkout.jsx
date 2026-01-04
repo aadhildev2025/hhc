@@ -54,6 +54,7 @@ const Checkout = () => {
             const { data } = await api.post('/orders', orderData);
             setOrderId(data._id);
             setOrderComplete(true);
+            window.scrollTo(0, 0);
             clearCart();
             toast.success('Order placed successfully!');
         } catch (error) {

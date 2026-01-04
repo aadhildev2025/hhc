@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiInstagram, FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FaWhatsapp, FaFacebook } from 'react-icons/fa';
 
 const Footer = () => {
     return (
@@ -18,8 +18,9 @@ const Footer = () => {
                         Spreading love and warmth through handcrafted home décor and unique gift items. Handmade with heart, just for you.
                     </p>
                     <div className="flex space-x-5 text-2xl">
-                        <a href="#" className="text-brand-dark/60 hover:text-brand-pink-dark transition-all duration-300 hover:scale-110"><FiInstagram /></a>
-                        <a href="https://wa.me/+94771234567" target="_blank" rel="noopener noreferrer" className="text-brand-dark/60 hover:text-green-500 transition-all duration-300 hover:scale-110"><FaWhatsapp /></a>
+                        <a href="https://www.facebook.com/profile.php?id=61571315741297" target="_blank" rel="noopener noreferrer" className="text-brand-dark/60 hover:text-blue-600 transition-all duration-300 hover:scale-110"><FaFacebook /></a>
+                        <a href="https://www.instagram.com/homeheartcreation/?igsh=Y3RydDRhbmVkdzhv#" target="_blank" rel="noopener noreferrer" className="text-brand-dark/60 hover:text-brand-pink-dark transition-all duration-300 hover:scale-110"><FiInstagram /></a>
+                        <a href="https://wa.me/94760601163?text=Hello%20HomeHeartCreation" target="_blank" rel="noopener noreferrer" className="text-brand-dark/60 hover:text-green-500 transition-all duration-300 hover:scale-110"><FaWhatsapp /></a>
                     </div>
                 </div>
 
@@ -50,11 +51,11 @@ const Footer = () => {
                     <h3 className="text-lg font-bold mb-6 text-brand-dark">Reach Us</h3>
                     <div className="flex items-start space-x-3 text-brand-dark/70">
                         <FiMapPin className="mt-1 text-brand-pink-dark" />
-                        <span>123 Creative Lane, Artisan Village, Colombo 07, Sri Lanka</span>
+                        <span>173/B Madurankuliya Puttalam Sri Lanka</span>
                     </div>
                     <div className="flex items-center space-x-3 text-brand-dark/70">
                         <FiPhone className="text-brand-pink-dark" />
-                        <span>+94 77 123 4567</span>
+                        <span>+94760601163</span>
                     </div>
                     <div className="flex items-center space-x-3 text-brand-dark/70">
                         <FiMail className="text-brand-pink-dark" />

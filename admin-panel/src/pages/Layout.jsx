@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { FiGrid, FiPackage, FiShoppingBag, FiUsers, FiLogOut, FiMenu, FiX, FiHome, FiMail, FiBell, FiCheckCircle } from 'react-icons/fi';
+import { FiGrid, FiPackage, FiShoppingBag, FiUsers, FiLogOut, FiMenu, FiX, FiHome, FiMail, FiBell, FiCheckCircle, FiStar } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import api from '../api/client';
 
@@ -78,6 +78,7 @@ const AdminLayout = () => {
         { name: 'Summary', path: '/dashboard', icon: <FiGrid /> },
         { name: 'Products', path: '/products', icon: <FiPackage /> },
         { name: 'Orders', path: '/orders', icon: <FiShoppingBag /> },
+        { name: 'Reviews', path: '/reviews', icon: <FiStar /> },
         { name: 'Messages', path: '/messages', icon: <FiMail /> },
         { name: 'Settings', path: '/settings', icon: <FiUsers /> },
     ];
@@ -97,7 +98,7 @@ const AdminLayout = () => {
                 <div className="h-full flex flex-col p-8">
                     <div className="flex items-center justify-between mb-12">
                         <div className="flex flex-col">
-                            <h1 className="text-xl font-serif font-bold bg-gradient-to-r from-brand-pink-dark to-brand-blue-dark bg-clip-text text-transparent">HomeHeart</h1>
+                            <h1 className="text-xl font-serif font-bold bg-gradient-to-r from-brand-pink-dark to-brand-blue-dark bg-clip-text text-transparent">HomeHeartCreation</h1>
                             <span className="text-[10px] font-bold text-brand-dark/30 tracking-widest uppercase">Management</span>
                         </div>
                         <button className="lg:hidden text-2xl" onClick={() => setSidebarOpen(false)}><FiX /></button>
