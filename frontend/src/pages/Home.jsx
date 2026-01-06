@@ -105,7 +105,7 @@ const Home = () => {
                             className="group relative h-64 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500"
                         >
                             <img
-                                src={cat.image && cat.image.startsWith('http') ? cat.image : `http://localhost:5000${cat.image || ''}`}
+                                src={cat.image && cat.image.startsWith('http') ? cat.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${cat.image || ''}`}
                                 alt={cat.name}
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 onError={(e) => {

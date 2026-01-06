@@ -107,7 +107,7 @@ const AdminLayout = () => {
                     <div className="mb-10 px-4 flex items-center space-x-4">
                         <div className="w-12 h-12 rounded-full border-2 border-brand-pink/20 overflow-hidden bg-brand-pink/5 flex items-center justify-center shrink-0">
                             {adminInfo.image ? (
-                                <img src={`http://localhost:5000${adminInfo.image}`} alt="Profile" className="w-full h-full object-cover" />
+                                <img src={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${adminInfo.image}`} alt="Profile" className="w-full h-full object-cover" />
                             ) : (
                                 <span className="text-brand-pink-dark font-bold">{adminInfo.name[0]}</span>
                             )}
@@ -138,7 +138,7 @@ const AdminLayout = () => {
 
                     <div className="pt-8 border-t border-brand-pink/10 space-y-4">
                         <button
-                            onClick={() => window.location.href = 'http://localhost:5173'}
+                            onClick={() => window.location.href = import.meta.env.VITE_SITE_URL || 'http://localhost:5173'}
                             className="flex items-center space-x-4 px-6 py-4 w-full text-brand-dark/50 hover:text-brand-pink-dark transition-colors"
                         >
                             <FiHome /> <span className="font-bold">View Site</span>
@@ -239,7 +239,7 @@ const AdminLayout = () => {
                             </div>
                             <div className="w-10 h-10 rounded-full border border-brand-pink/20 overflow-hidden bg-brand-pink/5 flex items-center justify-center font-bold">
                                 {adminInfo.image ? (
-                                    <img src={`http://localhost:5000${adminInfo.image}`} alt="Avatar" className="w-full h-full object-cover" />
+                                    <img src={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${adminInfo.image}`} alt="Avatar" className="w-full h-full object-cover" />
                                 ) : (
                                     <span className="text-brand-pink-dark">{adminInfo.name[0]}</span>
                                 )}

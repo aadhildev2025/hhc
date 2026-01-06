@@ -191,7 +191,7 @@ const Checkout = () => {
                                     <div key={item._id} className="flex justify-between items-center bg-brand-offwhite/50 p-4 rounded-2xl border border-brand-border">
                                         <div className="flex items-center space-x-4">
                                             <div className="w-16 h-16 rounded-xl overflow-hidden bg-brand-card">
-                                                <img src={item.image.startsWith('http') ? item.image : `http://localhost:5000${item.image}`} alt="" className="w-full h-full object-cover" />
+                                                <img src={item.image.startsWith('http') ? item.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${item.image}`} alt="" className="w-full h-full object-cover" />
                                             </div>
                                             <div>
                                                 <h4 className="font-bold text-brand-dark text-sm">{item.name}</h4>

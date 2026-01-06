@@ -43,7 +43,7 @@ const Cart = () => {
                                 <div className="col-span-2 flex items-center space-x-6">
                                     <div className="w-24 h-24 rounded-2xl overflow-hidden bg-brand-card border border-brand-border">
                                         <img
-                                            src={item.image.startsWith('http') ? item.image : `http://localhost:5000${item.image}`}
+                                            src={item.image.startsWith('http') ? item.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${item.image}`}
                                             alt={item.name}
                                             className="w-full h-full object-cover"
                                         />

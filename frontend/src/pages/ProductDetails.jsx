@@ -61,7 +61,7 @@ const ProductDetails = () => {
                     <div className="space-y-6 animate-slide-up delay-100">
                         <div className="aspect-square rounded-3xl overflow-hidden bg-brand-card border border-brand-border">
                             <img
-                                src={activeImage.startsWith('http') ? activeImage : `http://localhost:5000${activeImage}`}
+                                src={activeImage.startsWith('http') ? activeImage : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${activeImage}`}
                                 alt={product.name}
                                 className="w-full h-full object-cover"
                             />
@@ -76,7 +76,7 @@ const ProductDetails = () => {
                                         className={`aspect-square rounded-xl overflow-hidden border-2 transition-all ${activeImage === img ? 'border-brand-pink-dark scale-95 shadow-lg' : 'border-transparent opacity-70 hover:opacity-100'}`}
                                     >
                                         <img
-                                            src={img.startsWith('http') ? img : `http://localhost:5000${img}`}
+                                            src={img.startsWith('http') ? img : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${img}`}
                                             alt={`View ${i}`}
                                             className="w-full h-full object-cover"
                                         />

@@ -22,7 +22,7 @@ const ProductCard = ({ product }) => {
         <div className="group bg-brand-card backdrop-blur-sm rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-brand-border">
             <Link to={`/product/${product._id}`} className="block relative aspect-square overflow-hidden bg-brand-beige/30">
                 <img
-                    src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
+                    src={product.image.startsWith('http') ? product.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${product.image}`}
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
