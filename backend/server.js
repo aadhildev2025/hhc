@@ -35,6 +35,11 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/notifications', notificationRoutes);
 
+// Root route
+app.get('/', (req, res) => {
+    res.json({ message: 'HomeHeartCreation API is running' });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
     const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
