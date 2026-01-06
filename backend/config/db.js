@@ -11,8 +11,7 @@ const connectDB = async () => {
     console.error(`Error: ${error.message}`);
     console.error('------------------------------------------------');
     console.error('The server will stay online, but API calls will fail.');
-    console.error('Please whitelist this IP in MongoDB Atlas:');
-    console.error('Current IP: 112.134.192.124');
+    console.error('Please whitelist the server IP in MongoDB Atlas.');
     console.error('================================================');
     return false;
   }

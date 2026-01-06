@@ -57,16 +57,27 @@ const PORT = process.env.PORT || 5000;
 const startServer = async () => {
     try {
         await connectDB();
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-        });
+        if (process.env.NODE_ENV !== 'test') {
+            app.listen(PORT, () => {
+                console.log(`Server running on port ${PORT}`);
+            });
+        }
     } catch (error) {
         console.error('CRITICAL: Server failed to start:', error);
-        // Still listen so we don't get connection refused
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT} (DATABASE OFFLINE)`);
-        });
+        if (process.env.NODE_ENV !== 'test') {
+            app.listen(PORT, () => {
+                console.log(`Server running on port ${PORT} (DATABASE OFFLINE)`);
+            });
+        }
     }
 };
 
-startServer();
+if (process.env.NODE_ENV !== 'production') {
+    startServer();
+} else {
+    // On Vercel, we just need to ensure DB is connected
+    // This is a simpler approach for serverless
+    connectDB();
+}
+
+module.exports = app;
