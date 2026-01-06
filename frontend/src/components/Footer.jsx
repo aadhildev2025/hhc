@@ -39,9 +39,11 @@ const Footer = () => {
                 <div>
                     <h3 className="text-lg font-bold mb-6 text-brand-dark">Categories</h3>
                     <ul className="space-y-4 text-brand-dark/70">
+                        <li><Link to="/shop?category=Wall art" className="hover:text-brand-pink-dark transition-colors">Wall art</Link></li>
+                        <li><Link to="/shop?category=Planters" className="hover:text-brand-pink-dark transition-colors">Planters</Link></li>
+                        <li><Link to="/shop?category=Personalized Gifts" className="hover:text-brand-pink-dark transition-colors">Personalized Gifts</Link></li>
+                        <li><Link to="/shop?category=Event Decor" className="hover:text-brand-pink-dark transition-colors">Event Decor</Link></li>
                         <li><Link to="/shop?category=Home Decor" className="hover:text-brand-pink-dark transition-colors">Home Decor</Link></li>
-                        <li><Link to="/shop?category=Wall Art" className="hover:text-brand-pink-dark transition-colors">Wall Art</Link></li>
-                        <li><Link to="/shop?category=Handmade Gifts" className="hover:text-brand-pink-dark transition-colors">Handmade Gifts</Link></li>
                         <li><Link to="/shop?category=Candles" className="hover:text-brand-pink-dark transition-colors">Candles</Link></li>
                     </ul>
                 </div>
@@ -55,7 +57,7 @@ const Footer = () => {
                     </div>
                     <div className="flex items-center space-x-3 text-brand-dark/70">
                         <FiPhone className="text-brand-pink-dark" />
-                        <span>+94760601163</span>
+                        <span>+94 76 060 1163</span>
                     </div>
                     <div className="flex items-center space-x-3 text-brand-dark/70">
                         <FiMail className="text-brand-pink-dark" />
