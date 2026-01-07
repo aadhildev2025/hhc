@@ -159,7 +159,7 @@ const ManageProducts = () => {
                                         </div>
                                     </td>
                                     <td className="px-4 md:px-8 py-6 text-brand-dark/60 font-medium text-xs md:text-sm whitespace-nowrap">{p.category?.name || 'Uncategorized'}</td>
-                                    <td className="px-4 md:px-8 py-6 font-bold text-brand-blue-dark whitespace-nowrap text-sm md:text-base">Rs. {p.price.toLocaleString()}</td>
+                                    <td className="px-4 md:px-8 py-6 font-bold text-brand-blue-dark whitespace-nowrap text-sm md:text-base">LKR {p.price.toLocaleString()}</td>
                                     <td className="px-4 md:px-8 py-6 text-center">
                                         <span className={`px-3 md:px-4 py-1.5 rounded-full font-bold text-[10px] md:text-xs whitespace-nowrap ${p.stock > 10 ? 'bg-brand-pink/20 text-brand-pink-dark' : 'bg-red-50 text-red-500'}`}>
                                             {p.stock} units
@@ -196,7 +196,7 @@ const ManageProducts = () => {
                             <div className="flex-grow min-w-0 space-y-1">
                                 <div className="flex justify-between items-start">
                                     <h3 className="font-bold text-brand-dark truncate pr-2">{p.name}</h3>
-                                    <span className="text-[10px] font-bold text-brand-blue-dark whitespace-nowrap">Rs. {p.price.toLocaleString()}</span>
+                                    <span className="text-[10px] font-bold text-brand-blue-dark whitespace-nowrap">LKR {p.price.toLocaleString()}</span>
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <p className="text-[10px] text-brand-dark/40 font-medium uppercase tracking-widest">{p.category?.name || 'Uncategorized'}</p>
@@ -244,7 +244,7 @@ const ManageProducts = () => {
                                     </select>
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-brand-dark/60 uppercase">Price (Rs.)</label>
+                                    <label className="text-xs font-bold text-brand-dark/60 uppercase">Price (LKR)</label>
                                     <input required type="number" className="w-full p-4 bg-brand-pink/5 border border-brand-pink/30 rounded-2xl focus:ring-2 focus:ring-brand-pink-dark/50 outline-none transition-all" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
                                 </div>
                                 <div className="space-y-2">

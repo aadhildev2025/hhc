@@ -104,7 +104,7 @@ const ManageOrders = () => {
                                             ))}
                                         </div>
                                     </td>
-                                    <td className="px-4 md:px-8 py-6 font-bold text-brand-blue-dark whitespace-nowrap text-sm">Rs. {order.totalPrice.toLocaleString()}</td>
+                                    <td className="px-4 md:px-8 py-6 font-bold text-brand-blue-dark whitespace-nowrap text-sm">LKR {order.totalPrice.toLocaleString()}</td>
                                     <td className="px-4 md:px-8 py-6">
                                         <span className={`inline-flex items-center space-x-2 px-2.5 py-1 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-widest border whitespace-nowrap ${statusMap[order.status]?.color || 'bg-gray-50'}`}>
                                             {statusMap[order.status]?.icon}
@@ -158,7 +158,7 @@ const ManageOrders = () => {
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-[9px] font-bold text-brand-dark/30 uppercase tracking-tighter">Order Total</p>
-                                    <p className="text-sm font-bold text-brand-blue-dark">Rs. {order.totalPrice.toLocaleString()}</p>
+                                    <p className="text-sm font-bold text-brand-blue-dark">LKR {order.totalPrice.toLocaleString()}</p>
                                     <p className="text-[10px] text-brand-dark/40 font-medium">{order.customerPhone}</p>
                                 </div>
                             </div>

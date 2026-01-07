@@ -62,7 +62,7 @@ const Cart = () => {
 
                                 <div className="text-center font-bold text-brand-dark/70">
                                     <span className="md:hidden text-xs text-brand-dark/40 mr-2 uppercase">Price:</span>
-                                    Rs. {item.price.toLocaleString()}
+                                    LKR {item.price.toLocaleString()}
                                 </div>
 
                                 <div className="flex justify-center">
@@ -91,7 +91,7 @@ const Cart = () => {
 
                                 <div className="text-right font-bold text-brand-blue-dark text-lg">
                                     <span className="md:hidden text-xs text-brand-dark/40 mr-2 uppercase">Total:</span>
-                                    Rs. {(item.price * item.quantity).toLocaleString()}
+                                    LKR {(item.price * item.quantity).toLocaleString()}
                                 </div>
                             </div>
                         ))}
@@ -105,7 +105,7 @@ const Cart = () => {
                             <div className="space-y-4">
                                 <div className="flex justify-between text-brand-dark/70">
                                     <span>Subtotal</span>
-                                    <span className="font-bold">Rs. {cartTotal.toLocaleString()}</span>
+                                    <span className="font-bold">LKR {cartTotal.toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between text-brand-dark/70">
                                     <span>Shipping</span>
@@ -113,7 +113,7 @@ const Cart = () => {
                                 </div>
                                 <div className="pt-4 border-t border-brand-border flex justify-between text-xl text-brand-dark">
                                     <span className="font-serif font-bold">Total</span>
-                                    <span className="font-bold text-brand-blue-dark text-2xl">Rs. {cartTotal.toLocaleString()}</span>
+                                    <span className="font-bold text-brand-blue-dark text-2xl">LKR {cartTotal.toLocaleString()}</span>
                                 </div>
                             </div>
 

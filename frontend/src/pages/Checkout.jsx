@@ -177,7 +177,7 @@ const Checkout = () => {
                                 disabled={loading}
                                 className="w-full btn-primary h-16 flex items-center justify-center space-x-3 text-xl font-bold shadow-xl shadow-brand-pink-dark/20 disabled:opacity-50"
                             >
-                                {loading ? 'Processing...' : `Place Order • Rs. ${cartTotal.toLocaleString()}`}
+                                {loading ? 'Processing...' : `Place Order • LKR ${cartTotal.toLocaleString()}`}
                             </button>
                         </form>
                     </div>
@@ -198,7 +198,7 @@ const Checkout = () => {
                                                 <p className="text-xs text-brand-dark/50">Qty: {item.quantity}</p>
                                             </div>
                                         </div>
-                                        <span className="font-bold text-brand-blue-dark text-sm">Rs. {(item.price * item.quantity).toLocaleString()}</span>
+                                        <span className="font-bold text-brand-blue-dark text-sm">LKR {(item.price * item.quantity).toLocaleString()}</span>
                                     </div>
                                 ))}
                             </div>
@@ -206,7 +206,7 @@ const Checkout = () => {
                             <div className="pt-6 border-t border-brand-pink/10 space-y-4">
                                 <div className="flex justify-between text-brand-dark/70">
                                     <span>Subtotal</span>
-                                    <span className="font-bold">Rs. {cartTotal.toLocaleString()}</span>
+                                    <span className="font-bold">LKR {cartTotal.toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between text-brand-dark/70">
                                     <span className="flex items-center"><FiTruck className="mr-2" /> Shipping</span>
@@ -214,7 +214,7 @@ const Checkout = () => {
                                 </div>
                                 <div className="pt-6 flex justify-between text-2xl text-brand-dark">
                                     <span className="font-serif font-bold">Total</span>
-                                    <span className="font-bold text-brand-blue-dark">Rs. {cartTotal.toLocaleString()}</span>
+                                    <span className="font-bold text-brand-blue-dark">LKR {cartTotal.toLocaleString()}</span>
                                 </div>
                             </div>
 

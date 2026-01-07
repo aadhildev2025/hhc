@@ -32,7 +32,7 @@ const AdminDashboard = () => {
     }, []);
 
     const statCards = [
-        { title: 'Total Revenue', value: `Rs. ${stats.totalRevenue.toLocaleString()}`, icon: <FiDollarSign />, color: 'bg-green-50 text-green-500' },
+        { title: 'Total Revenue', value: `LKR ${stats.totalRevenue.toLocaleString()}`, icon: <FiDollarSign />, color: 'bg-green-50 text-green-500' },
         { title: 'Total Orders', value: stats.totalOrders, icon: <FiShoppingBag />, color: 'bg-brand-pink/20 text-brand-pink-dark' },
         { title: 'Pending Orders', value: stats.pendingOrders, icon: <FiTrendingUp />, color: 'bg-brand-blue/20 text-brand-blue-dark' },
         { title: 'Active Items', value: '8', icon: <FiPackage />, color: 'bg-brand-offwhite text-brand-dark/50' },
@@ -84,7 +84,7 @@ const AdminDashboard = () => {
                                             <p className="text-[10px] text-brand-dark/40">{new Date(order.createdAt).toLocaleDateString()}</p>
                                         </td>
                                         <td className="py-5 px-2 font-bold text-brand-blue-dark text-xs md:text-sm whitespace-nowrap">
-                                            Rs. {order.totalPrice.toLocaleString()}
+                                            LKR {order.totalPrice.toLocaleString()}
                                         </td>
                                         <td className="py-5 px-2">
                                             <span className={`px-2 py-1 rounded-full text-[8px] md:text-[10px] font-bold uppercase tracking-widest whitespace-nowrap ${order.status === 'delivered' ? 'bg-green-100 text-green-600' :

@@ -63,7 +63,7 @@ const ProductCard = ({ product }) => {
                     </h3>
                 </Link>
                 <div className="flex items-center justify-between">
-                    <span className="text-xl font-bold text-brand-blue-dark">Rs. {product.price.toLocaleString()}</span>
+                    <span className="text-xl font-bold text-brand-blue-dark">LKR {product.price.toLocaleString()}</span>
                     <div className="flex items-center text-xs text-brand-dark/50">
                         <span className="text-brand-pink-dark mr-1">★</span> {product.rating > 0 ? product.rating.toFixed(1) : 'New'}
                     </div>
