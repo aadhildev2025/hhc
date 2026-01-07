@@ -245,11 +245,11 @@ const ManageProducts = () => {
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-brand-dark/60 uppercase">Price (LKR)</label>
-                                    <input required type="number" className="w-full p-4 bg-brand-pink/5 border border-brand-pink/30 rounded-2xl focus:ring-2 focus:ring-brand-pink-dark/50 outline-none transition-all" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
+                                    <input required type="number" onWheel={(e) => e.target.blur()} className="w-full p-4 bg-brand-pink/5 border border-brand-pink/30 rounded-2xl focus:ring-2 focus:ring-brand-pink-dark/50 outline-none transition-all" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-brand-dark/60 uppercase">Stock</label>
-                                    <input required type="number" className="w-full p-4 bg-brand-pink/5 border border-brand-pink/30 rounded-2xl focus:ring-2 focus:ring-brand-pink-dark/50 outline-none transition-all" value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: e.target.value })} />
+                                    <input required type="number" onWheel={(e) => e.target.blur()} className="w-full p-4 bg-brand-pink/5 border border-brand-pink/30 rounded-2xl focus:ring-2 focus:ring-brand-pink-dark/50 outline-none transition-all" value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: e.target.value })} />
                                 </div>
                             </div>
                             <div className="space-y-2">
