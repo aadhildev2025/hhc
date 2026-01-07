@@ -1,18 +1,5 @@
 {
-    "trailingSlash": false,
     "rewrites": [
-        {
-            "source": "/sitemap.xml",
-            "destination": "/sitemap.xml"
-        },
-        {
-            "source": "/robots.txt",
-            "destination": "/robots.txt"
-        },
-        {
-            "source": "/test.txt",
-            "destination": "/test.txt"
-        },
         {
             "source": "/(.*)",
             "destination": "/index.html"
