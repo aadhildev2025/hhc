@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { FiGrid, FiPackage, FiShoppingBag, FiUsers, FiLogOut, FiMenu, FiX, FiHome, FiMail, FiBell, FiCheckCircle, FiStar } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import api from '../api/client';
@@ -97,15 +97,15 @@ const AdminLayout = () => {
             <aside className={`fixed lg:static inset-y-0 left-0 w-72 bg-white/80 backdrop-blur-xl border-r border-brand-pink/10 z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto no-scrollbar ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
                 <div className="h-full flex flex-col p-8">
                     <div className="flex items-center justify-between mb-12">
-                        <div className="flex flex-col">
-                            <h1 className="text-xl font-serif font-bold bg-gradient-to-r from-brand-pink-dark to-brand-blue-dark bg-clip-text text-transparent">HomeHeartCreation</h1>
-                            <span className="text-[10px] font-bold text-brand-dark/30 tracking-widest uppercase">Management</span>
-                        </div>
+                        <Link to="/dashboard" className="flex flex-col group transition-all">
+                            <h1 className="text-xl font-serif font-bold bg-gradient-to-r from-brand-pink-dark to-brand-blue-dark bg-clip-text text-transparent group-hover:scale-105 transition-transform origin-left">HomeHeartCreation</h1>
+                            <span className="text-[10px] font-bold text-brand-dark/30 tracking-widest uppercase group-hover:text-brand-pink-dark transition-colors">Management</span>
+                        </Link>
                         <button className="lg:hidden text-2xl" onClick={() => setSidebarOpen(false)}><FiX /></button>
                     </div>
 
-                    <div className="mb-10 px-4 flex items-center space-x-4">
-                        <div className="w-12 h-12 rounded-full border-2 border-brand-pink/20 overflow-hidden bg-brand-pink/5 flex items-center justify-center shrink-0">
+                    <Link to="/dashboard" className="mb-10 px-4 flex items-center space-x-4 group hover:bg-brand-pink/5 p-2 rounded-2xl transition-all" onClick={() => setSidebarOpen(false)}>
+                        <div className="w-12 h-12 rounded-full border-2 border-brand-pink/20 overflow-hidden bg-brand-pink/5 flex items-center justify-center shrink-0 group-hover:border-brand-pink-dark transition-colors">
                             {adminInfo.image ? (
                                 <img src={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${adminInfo.image}`} alt="Profile" className="w-full h-full object-cover" />
                             ) : (
@@ -113,9 +113,9 @@ const AdminLayout = () => {
                             )}
                         </div>
                         <div className="overflow-hidden">
-                            <p className="text-sm font-bold text-brand-dark truncate">{adminInfo.name}</p>
+                            <p className="text-sm font-bold text-brand-dark truncate group-hover:text-brand-pink-dark transition-colors">{adminInfo.name}</p>
                         </div>
-                    </div>
+                    </Link>
 
                     <nav className="flex-grow space-y-4">
                         {navItems.map((item) => (
@@ -233,18 +233,18 @@ const AdminLayout = () => {
                             )}
                         </div>
 
-                        <div className="flex items-center space-x-4">
+                        <Link to="/dashboard" className="flex items-center space-x-4 group hover:bg-brand-pink/5 p-2 rounded-xl transition-all">
                             <div className="text-right hidden sm:block">
-                                <p className="text-sm font-bold text-brand-dark">{adminInfo.name}</p>
+                                <p className="text-sm font-bold text-brand-dark group-hover:text-brand-pink-dark transition-colors">{adminInfo.name}</p>
                             </div>
-                            <div className="w-10 h-10 rounded-full border border-brand-pink/20 overflow-hidden bg-brand-pink/5 flex items-center justify-center font-bold">
+                            <div className="w-10 h-10 rounded-full border border-brand-pink/20 overflow-hidden bg-brand-pink/5 flex items-center justify-center font-bold group-hover:border-brand-pink-dark transition-colors">
                                 {adminInfo.image ? (
                                     <img src={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${adminInfo.image}`} alt="Avatar" className="w-full h-full object-cover" />
                                 ) : (
                                     <span className="text-brand-pink-dark">{adminInfo.name[0]}</span>
                                 )}
                             </div>
-                        </div>
+                        </Link>
                     </div>
                 </header>
 
