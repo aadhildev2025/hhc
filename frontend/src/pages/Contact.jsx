@@ -98,7 +98,7 @@ const Contact = () => {
                         <div className="space-y-4 pt-12 border-t border-brand-pink/10">
                             <h4 className="font-bold text-brand-dark uppercase tracking-widest text-xs">Follow Our Journey</h4>
                             <div className="flex space-x-6 text-3xl text-brand-blue-dark">
-                                <a href="https://www.facebook.com/profile.php?id=61571315741297" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition-all duration-300 hover:scale-110"><FaFacebook /></a>
+                                <a href="https://www.facebook.com/share/1Besh5q7ZA/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition-all duration-300 hover:scale-110"><FaFacebook /></a>
                                 <a href="https://www.instagram.com/homeheartcreation/?igsh=Y3RydDRhbmVkdzhv#" target="_blank" rel="noopener noreferrer" className="hover:text-brand-pink-dark transition-all duration-300 hover:scale-110"><FiInstagram /></a>
                                 <a href="https://wa.me/94760601163?text=Hello%20HomeHeartCreation" target="_blank" rel="noopener noreferrer" className="hover:text-green-500 transition-all duration-300 hover:scale-110"><FaWhatsapp /></a>
                             </div>

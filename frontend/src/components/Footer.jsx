@@ -18,7 +18,7 @@ const Footer = () => {
                         Spreading love and warmth through handcrafted home décor and unique gift items. Handmade with heart, just for you.
                     </p>
                     <div className="flex space-x-5 text-2xl">
-                        <a href="https://www.facebook.com/profile.php?id=61571315741297" target="_blank" rel="noopener noreferrer" className="text-brand-dark/60 hover:text-blue-600 transition-all duration-300 hover:scale-110"><FaFacebook /></a>
+                        <a href="https://www.facebook.com/share/1Besh5q7ZA/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="text-brand-dark/60 hover:text-blue-600 transition-all duration-300 hover:scale-110"><FaFacebook /></a>
                         <a href="https://www.instagram.com/homeheartcreation/?igsh=Y3RydDRhbmVkdzhv#" target="_blank" rel="noopener noreferrer" className="text-brand-dark/60 hover:text-brand-pink-dark transition-all duration-300 hover:scale-110"><FiInstagram /></a>
                         <a href="https://wa.me/94760601163?text=Hello%20HomeHeartCreation" target="_blank" rel="noopener noreferrer" className="text-brand-dark/60 hover:text-green-500 transition-all duration-300 hover:scale-110"><FaWhatsapp /></a>
                     </div>
