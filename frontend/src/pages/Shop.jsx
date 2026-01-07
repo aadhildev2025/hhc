@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import api from '../api/client';
 import ProductCard from '../components/ProductCard';
 import { FiFilter, FiSearch, FiX, FiChevronDown } from 'react-icons/fi';
+import SEO from '../components/SEO';
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
@@ -57,6 +58,11 @@ const Shop = () => {
 
     return (
         <div className="min-h-screen pt-24 pb-20 px-6 md:px-12 bg-brand-offwhite">
+            <SEO
+                title="Shop All"
+                description="Browse our wide collection of handmade wall art, planters, and personalized gifts. Find the perfect piece for your home."
+                url="/shop"
+            />
             <div className="max-w-7xl mx-auto space-y-12">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 animate-slide-down">

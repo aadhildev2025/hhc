@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext.jsx';
 import { FiShoppingCart, FiHeart, FiArrowLeft, FiTruck, FiRefreshCw, FiShield, FiStar, FiEdit3 } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import ReviewModal from '../components/ReviewModal';
+import SEO from '../components/SEO';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -48,6 +49,13 @@ const ProductDetails = () => {
 
     return (
         <div className="min-h-screen pt-28 pb-20 px-6 md:px-12 bg-brand-offwhite">
+            <SEO
+                title={product.name}
+                description={product.description}
+                image={product.image.startsWith('http') ? product.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${product.image}`}
+                url={`/product/${product._id}`}
+                type="product"
+            />
             <div className="max-w-7xl mx-auto">
                 <button
                     onClick={() => navigate(-1)}

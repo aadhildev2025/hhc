@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../api/client';
 import ProductCard from '../components/ProductCard';
 import { FiArrowRight, FiShield, FiHeart, FiGift } from 'react-icons/fi';
+import SEO from '../components/SEO';
 
 const Home = () => {
     const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -29,6 +30,10 @@ const Home = () => {
 
     return (
         <div className="space-y-20 pb-20">
+            <SEO
+                title="Home"
+                description="Welcome to HomeHeartCreation. Discover handcrafted treasures, wall art, and personalized gifts made with love in Sri Lanka."
+            />
             {/* Hero Section */}
             <section className="relative h-[90vh] flex items-center overflow-hidden">
                 {/* Abstract Background Elements */}

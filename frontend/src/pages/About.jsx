@@ -1,5 +1,5 @@
-import React from 'react';
 import { FiHeart, FiStar, FiTruck, FiLayers } from 'react-icons/fi';
+import SEO from '../components/SEO';
 
 const About = () => {
     const values = [
@@ -11,6 +11,11 @@ const About = () => {
 
     return (
         <div className="min-h-screen pt-24 bg-brand-offwhite">
+            <SEO
+                title="Our Story"
+                description="Learn about HomeHeartCreation's journey. From a small home studio in Sri Lanka to a community of artisans crafting soulful home decor."
+                url="/about"
+            />
             {/* Hero */}
             <section className="relative h-[60vh] flex items-center justify-center bg-brand-pink/10 overflow-hidden">
                 <div className="absolute inset-0 bg-[url('http://localhost:5000/uploads/about-hero.png')] bg-cover bg-center mix-blend-overlay opacity-30"></div>

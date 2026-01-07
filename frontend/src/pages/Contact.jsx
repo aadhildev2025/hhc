@@ -2,6 +2,7 @@ import { FiMail, FiPhone, FiMapPin, FiInstagram } from 'react-icons/fi';
 import { FaWhatsapp, FaFacebook } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import api from '../api/client';
+import SEO from '../components/SEO';
 
 const Contact = () => {
     const handleSubmit = async (e) => {
@@ -25,6 +26,11 @@ const Contact = () => {
 
     return (
         <div className="min-h-screen pt-24 bg-brand-offwhite">
+            <SEO
+                title="Contact Us"
+                description="Have questions? Get in touch with HomeHeartCreation. We're here to help with your handmade decor and personalized gift inquiries."
+                url="/contact"
+            />
             {/* Header */}
             <div className="bg-brand-card/30 backdrop-blur-sm py-20 px-6 text-center animate-slide-down border-b border-brand-border">
                 <h1 className="text-5xl md:text-6xl font-serif text-brand-dark">Get in Touch</h1>
