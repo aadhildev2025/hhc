@@ -1,12 +1,21 @@
 {
-    "routes": [
+    "trailingSlash": false,
+    "rewrites": [
         {
-            "src": "/(sitemap.xml|robots.txt|favicon.png|vite.svg)",
-            "dest": "/$1"
+            "source": "/sitemap.xml",
+            "destination": "/sitemap.xml"
         },
         {
-            "src": "/(.*)",
-            "dest": "/index.html"
+            "source": "/robots.txt",
+            "destination": "/robots.txt"
+        },
+        {
+            "source": "/test.txt",
+            "destination": "/test.txt"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
         }
     ]
 }
