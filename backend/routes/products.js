@@ -114,8 +114,13 @@ router.post('/', protect, admin, upload.array('images', 5), async (req, res) => 
         let images = [];
 
         if (req.files && req.files.length > 0) {
-            image = `/uploads/${req.files[0].filename}`;
-            images = req.files.map(file => `/uploads/${file.filename}`);
+            image = req.files[0].path; // Cloudinary returns the full URL in .path
+            images = req.files.map(file => file.path);
+        }
+
+        // Validate that an image was provided since it's required in the model
+        if (!image) {
+            return res.status(400).json({ message: 'At least one product image is required' });
         }
 
         const product = await Product.create({
@@ -131,6 +136,7 @@ router.post('/', protect, admin, upload.array('images', 5), async (req, res) => 
 
         res.status(201).json(product);
     } catch (error) {
+        console.error('Error creating product:', error);
         res.status(500).json({ message: error.message });
     }
 });
@@ -152,8 +158,8 @@ router.put('/:id', protect, admin, upload.array('images', 5), async (req, res) =
             product.featured = featured !== undefined ? featured === 'true' : product.featured;
 
             if (req.files && req.files.length > 0) {
-                product.image = `/uploads/${req.files[0].filename}`;
-                product.images = req.files.map(file => `/uploads/${file.filename}`);
+                product.image = req.files[0].path;
+                product.images = req.files.map(file => file.path);
             }
 
             const updatedProduct = await product.save();
@@ -162,6 +168,7 @@ router.put('/:id', protect, admin, upload.array('images', 5), async (req, res) =
             res.status(404).json({ message: 'Product not found' });
         }
     } catch (error) {
+        console.error('Error updating product:', error);
         res.status(500).json({ message: error.message });
     }
 });

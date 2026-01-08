@@ -150,7 +150,7 @@ const ManageProducts = () => {
                                     <td className="px-4 md:px-8 py-6">
                                         <div className="flex items-center space-x-4">
                                             <div className="w-10 h-10 md:w-14 md:h-14 shrink-0 rounded-xl overflow-hidden bg-brand-pink/10 border border-brand-pink/10 group-hover:scale-105 transition-transform">
-                                                <img src={p.image.startsWith('http') ? p.image : `http://localhost:5000${p.image}`} className="w-full h-full object-cover" />
+                                                <img src={p.image.startsWith('http') ? p.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${p.image}`} className="w-full h-full object-cover" />
                                             </div>
                                             <div className="min-w-0">
                                                 <p className="font-bold text-brand-dark truncate max-w-[120px] md:max-w-none">{p.name}</p>
@@ -191,7 +191,7 @@ const ManageProducts = () => {
                     {filteredProducts.map((p) => (
                         <div key={p._id} className="p-6 flex items-center space-x-4">
                             <div className="w-16 h-16 shrink-0 rounded-2xl overflow-hidden bg-brand-pink/10 border border-brand-pink/10">
-                                <img src={p.image.startsWith('http') ? p.image : `http://localhost:5000${p.image}`} className="w-full h-full object-cover" />
+                                <img src={p.image.startsWith('http') ? p.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${p.image}`} className="w-full h-full object-cover" />
                             </div>
                             <div className="flex-grow min-w-0 space-y-1">
                                 <div className="flex justify-between items-start">
