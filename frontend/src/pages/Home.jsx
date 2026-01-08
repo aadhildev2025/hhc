@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; // Git tracking check
 import { Link } from 'react-router-dom';
 import api from '../api/client';
 import ProductCard from '../components/ProductCard';
