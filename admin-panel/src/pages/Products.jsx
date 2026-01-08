@@ -33,7 +33,13 @@ const ManageProducts = () => {
                 api.get('/products'),
                 api.get('/categories')
             ]);
-            setProducts(prodRes.data);
+
+            // API now returns { products, page, pages, total } or array
+            if (prodRes.data && prodRes.data.products) {
+                setProducts(prodRes.data.products);
+            } else {
+                setProducts(prodRes.data);
+            }
             setCategories(catRes.data);
         } catch (error) {
             toast.error('Failed to load products');

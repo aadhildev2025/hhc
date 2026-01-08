@@ -16,6 +16,11 @@ const storage = new CloudinaryStorage({
     params: {
         folder: 'home-heart-creation',
         allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+        transformation: [
+            { width: 1000, crop: 'limit' },
+            { quality: 'auto' },
+            { fetch_format: 'auto' }
+        ]
     },
 });
 

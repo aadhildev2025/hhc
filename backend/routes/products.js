@@ -63,12 +63,25 @@ router.get('/', async (req, res) => {
             sortOption.createdAt = -1;
         }
 
+        // Pagination
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 20;
+        const skip = (page - 1) * limit;
+
+        const count = await Product.countDocuments(query);
         const products = await Product.find(query)
             .populate('category', 'name')
             .sort(sortOption)
+            .skip(skip)
+            .limit(limit)
             .lean();
 
-        res.json(products);
+        res.json({
+            products,
+            page,
+            pages: Math.ceil(count / limit),
+            total: count
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

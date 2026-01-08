@@ -23,12 +23,22 @@ const Shop = () => {
         { id: 'price-desc', label: 'Price: High to Low' }
     ];
 
+    const [debouncedSearch, setDebouncedSearch] = useState(search);
+
+    // Debounce search term
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(search);
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [search]);
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
                 const queryParams = new URLSearchParams({
-                    search,
+                    search: debouncedSearch,
                     category: selectedCategory,
                     sort: sortBy
                 });
@@ -38,7 +48,12 @@ const Shop = () => {
                     api.get('/categories')
                 ]);
 
-                setProducts(prodRes.data);
+                // API now returns { products, page, pages, total }
+                if (prodRes.data && prodRes.data.products) {
+                    setProducts(prodRes.data.products);
+                } else {
+                    setProducts(prodRes.data);
+                }
                 setCategories(catRes.data);
             } catch (error) {
                 console.error('Error fetching shop data:', error);
@@ -47,7 +62,7 @@ const Shop = () => {
             }
         };
         fetchData();
-    }, [search, selectedCategory, sortBy]);
+    }, [debouncedSearch, selectedCategory, sortBy]);
 
     const clearFilters = () => {
         setSearch('');
