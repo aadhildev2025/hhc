@@ -65,7 +65,8 @@ router.get('/', async (req, res) => {
 
         const products = await Product.find(query)
             .populate('category', 'name')
-            .sort(sortOption);
+            .sort(sortOption)
+            .lean();
 
         res.json(products);
     } catch (error) {

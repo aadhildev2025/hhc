@@ -27,6 +27,17 @@ app.use(express.urlencoded({ extended: true }));
 // Static folder for uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Health check
+app.get('/api/health', (req, res) => {
+    const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
+    res.json({
+        status: dbStatus === 'Connected' ? 'OK' : 'DEGRADED',
+        database: dbStatus,
+        message: 'HomeHeartCreation API is running',
+        whitelisting_ip: '112.134.192.124'
+    });
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
@@ -38,17 +49,6 @@ app.use('/api/notifications', notificationRoutes);
 // Root route
 app.get('/', (req, res) => {
     res.json({ message: 'HomeHeartCreation API is running' });
-});
-
-// Health check
-app.get('/api/health', (req, res) => {
-    const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
-    res.json({
-        status: dbStatus === 'Connected' ? 'OK' : 'DEGRADED',
-        database: dbStatus,
-        message: 'HomeHeartCreation API is running',
-        whitelisting_ip: '112.134.192.124'
-    });
 });
 
 // Error handling middleware
