@@ -25,13 +25,29 @@ const Shop = () => {
 
     const [debouncedSearch, setDebouncedSearch] = useState(search);
 
-    // Debounce search term
+    // Sync state with URL parameters
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(search);
-        }, 500);
-        return () => clearTimeout(timer);
-    }, [search]);
+        const searchParam = searchParams.get('search') || '';
+        const categoryParam = searchParams.get('category') || '';
+        const sortParam = searchParams.get('sort') || 'newest';
+
+        if (searchParam !== search) setSearch(searchParam);
+        if (categoryParam !== selectedCategory) setSelectedCategory(categoryParam);
+        if (sortParam !== sortBy) setSortBy(sortParam);
+
+        // Scroll to top when filters change
+        window.scrollTo(0, 0);
+    }, [searchParams]);
+
+    // Update URL when state changes
+    useEffect(() => {
+        const params = {};
+        if (debouncedSearch) params.search = debouncedSearch;
+        if (selectedCategory) params.category = selectedCategory;
+        if (sortBy !== 'newest') params.sort = sortBy;
+
+        setSearchParams(params, { replace: true });
+    }, [debouncedSearch, selectedCategory, sortBy]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,6 +58,8 @@ const Shop = () => {
                     category: selectedCategory,
                     sort: sortBy
                 });
+
+                console.log('Fetching products with:', queryParams.toString());
 
                 const [prodRes, catRes] = await Promise.all([
                     api.get(`/products?${queryParams.toString()}`),
@@ -65,9 +83,6 @@ const Shop = () => {
     }, [debouncedSearch, selectedCategory, sortBy]);
 
     const clearFilters = () => {
-        setSearch('');
-        setSelectedCategory('');
-        setSortBy('newest');
         setSearchParams({});
     };
 
