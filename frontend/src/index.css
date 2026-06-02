@@ -1,193 +1,363 @@
 @import "tailwindcss";
 
+/* ============================================
+   DESIGN SYSTEM: HomeHeartCreation
+   Vibrant Blue and Pink Theme
+   ============================================ */
+
 :root {
-  --brand-pink: #fbcfe8;
-  --brand-blue: #bfdbfe;
-  --brand-pink-dark: #f472b6;
-  --brand-blue-dark: #60a5fa;
-  --brand-offwhite: #fafafa;
-  --brand-dark: #1e293b;
-  --brand-card-bg: rgba(255, 255, 255, 0.7);
-  --brand-border: rgba(244, 114, 182, 0.1);
+  /* Core Palette */
+  --brand-rose: #f472b6;      /* pink-dark */
+  --brand-rose-light: #fbcfe8;/* pink-light */
+  --brand-rose-dark: #db2777; /* hover pink */
+  --brand-sage: #60a5fa;      /* blue-dark */
+  --brand-sage-light: #bfdbfe;/* blue-light */
+  --brand-cream: #fafafa;     /* offwhite */
+  --brand-linen: #f1f5f9;     /* light gray/linen */
+  --brand-dark: #1e293b;      /* dark slate */
+  --brand-muted: #64748b;
+  --brand-card-bg: rgba(255, 255, 255, 0.85);
+  --brand-border: rgba(244, 114, 182, 0.15);
+  --brand-shadow: rgba(30, 41, 59, 0.05);
+  --brand-gold: #fbbf24;
 }
 
 .dark {
-  --brand-pink: #4a1d1d;
-  --brand-blue: #1e293b;
-  --brand-pink-dark: #f472b6;
-  --brand-blue-dark: #38bdf8;
-  --brand-offwhite: #0f172a;
+  --brand-rose: #f472b6;
+  --brand-rose-light: #4a1d1d;
+  --brand-rose-dark: #e879f9;
+  --brand-sage: #38bdf8;
+  --brand-sage-light: #1e293b;
+  --brand-cream: #0f172a;
+  --brand-linen: #1e293b;
   --brand-dark: #f8fafc;
-  --brand-card-bg: rgba(30, 41, 59, 0.6);
+  --brand-muted: #94a3b8;
+  --brand-card-bg: rgba(30, 41, 59, 0.7);
   --brand-border: rgba(244, 114, 182, 0.2);
-}
-
-.warm {
-  --brand-pink: #efeae5;
-  --brand-blue: #d6ccbe;
-  --brand-pink-dark: #926c44;
-  --brand-blue-dark: #7c6244;
-  --brand-offwhite: #faf7f2;
-  --brand-dark: #433422;
-  --brand-card-bg: rgba(255, 255, 255, 0.8);
-  --brand-border: rgba(146, 108, 68, 0.1);
+  --brand-shadow: rgba(0, 0, 0, 0.3);
+  --brand-gold: #fbbf24;
 }
 
 @theme {
-  --color-brand-pink: var(--brand-pink);
-  --color-brand-blue: var(--brand-blue);
-  --color-brand-pink-dark: var(--brand-pink-dark);
-  --color-brand-blue-dark: var(--brand-blue-dark);
-  --color-brand-offwhite: var(--brand-offwhite);
+  --color-brand-rose: var(--brand-rose);
+  --color-brand-rose-light: var(--brand-rose-light);
+  --color-brand-rose-dark: var(--brand-rose-dark);
+  --color-brand-sage: var(--brand-sage);
+  --color-brand-sage-light: var(--brand-sage-light);
+  --color-brand-cream: var(--brand-cream);
+  --color-brand-linen: var(--brand-linen);
   --color-brand-dark: var(--brand-dark);
+  --color-brand-muted: var(--brand-muted);
   --color-brand-card: var(--brand-card-bg);
   --color-brand-border: var(--brand-border);
+  --color-brand-gold: var(--brand-gold);
 
-  --font-brand: "Inter", sans-serif;
-  --font-serif: "Playfair Display", serif;
+  /* Aliases for backwards compatibility */
+  --color-brand-pink: var(--brand-rose-light);
+  --color-brand-blue: var(--brand-sage-light);
+  --color-brand-pink-dark: var(--brand-rose);
+  --color-brand-blue-dark: var(--brand-sage);
+  --color-brand-offwhite: var(--brand-cream);
+
+  --font-brand: "Jost", sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
 }
 
+/* ============================================
+   BASE STYLES
+   ============================================ */
 @layer base {
-  body {
-    @apply bg-brand-offwhite text-brand-dark font-brand;
+  *, *::before, *::after {
+    box-sizing: border-box;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-brand-cream text-brand-dark font-brand;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
     @apply font-serif;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  input, textarea, select, button {
+    font-family: inherit;
   }
 }
 
+/* ============================================
+   COMPONENT CLASSES
+   ============================================ */
 @layer components {
+  /* Buttons */
   .btn-primary {
-    @apply px-6 py-2 bg-brand-pink-dark text-white rounded-full hover:bg-brand-pink-dark/90 transition-all duration-300;
+    @apply inline-flex items-center justify-center gap-2;
+    padding: 0.75rem 2rem;
+    background: var(--brand-rose);
+    color: #fff;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 20px rgba(244, 114, 182, 0.3);
+  }
+  .btn-primary:hover {
+    background: var(--brand-rose-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 28px rgba(244, 114, 182, 0.4);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2;
+    padding: 0.75rem 2rem;
+    background: transparent;
+    color: var(--brand-dark);
+    border: 1.5px solid var(--brand-border);
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    transition: all 0.25s ease;
+  }
+  .btn-outline:hover {
+    border-color: var(--brand-rose);
+    color: var(--brand-rose);
+    background: rgba(244, 114, 182, 0.05);
   }
 
   .btn-secondary {
-    @apply px-6 py-2 bg-brand-blue-dark text-white rounded-full hover:bg-brand-blue-dark/90 transition-all duration-300;
+    @apply inline-flex items-center justify-center gap-2;
+    padding: 0.75rem 2rem;
+    background: var(--brand-sage);
+    color: #fff;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 20px rgba(96, 165, 250, 0.3);
+  }
+  .btn-secondary:hover {
+    background: var(--brand-sage);
+    filter: brightness(0.9);
+    transform: translateY(-1px);
+  }
+
+  /* Cards */
+  .glass-card {
+    background: var(--brand-card-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--brand-border);
+    border-radius: 1.5rem;
   }
 
   .glass {
-    @apply bg-brand-card backdrop-blur-md border border-brand-border;
+    background: var(--brand-card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--brand-border);
   }
 
+  /* Section Heading */
+  .section-label {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brand-rose);
+  }
+
+  .section-title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600;
+    color: var(--brand-dark);
+    line-height: 1.1;
+  }
+
+  /* Input base */
+  .input-base {
+    width: 100%;
+    padding: 0.875rem 1.125rem;
+    background: var(--brand-cream);
+    border: 1.5px solid var(--brand-border);
+    border-radius: 0.875rem;
+    color: var(--brand-dark);
+    font-family: "Jost", sans-serif;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+  }
+  .input-base:focus {
+    border-color: var(--brand-rose);
+    box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.12);
+  }
+
+  /* Gradient accents */
   .couple-gradient {
-    @apply bg-gradient-to-r from-brand-pink to-brand-blue;
+    background: linear-gradient(135deg, var(--brand-rose-light), var(--brand-sage-light));
+  }
+  .couple-text-gradient {
+    background: linear-gradient(135deg, var(--brand-rose), var(--brand-sage));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  .couple-text-gradient {
-    @apply bg-gradient-to-r from-brand-pink-dark to-brand-blue-dark bg-clip-text text-transparent;
+  /* brand-card alias */
+  .brand-card {
+    background: var(--brand-card-bg);
+    border: 1px solid var(--brand-border);
+  }
+
+  /* Divider */
+  .divider-rose {
+    height: 2px;
+    width: 3rem;
+    background: linear-gradient(90deg, var(--brand-rose), var(--brand-sage));
+    border-radius: 999px;
   }
 }
 
-/* Smooth Navigation & entry animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
+/* ============================================
+   ANIMATIONS & KEYFRAMES
+   ============================================ */
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-30px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.98);
-  }
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
 
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
-
-  100% {
-    transform: translateY(0px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
 }
 
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ============================================
+   UTILITY ANIMATION CLASSES
+   ============================================ */
+
 .animate-smooth {
-  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-page-in {
-  animation: fadeInScale 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: fadeInScale 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-fade-in {
-  animation: fadeIn 1s ease-out forwards;
+  animation: fadeIn 0.8s ease-out both;
 }
 
 .animate-float {
-  animation: float 4s ease-in-out infinite;
+  animation: float 5s ease-in-out infinite;
 }
 
 .animate-slide-up {
-  @apply opacity-0 translate-y-8;
-  animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-slide-down {
-  @apply opacity-0 -translate-y-8;
-  animation: fadeInDown 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
+  transform: translateY(-24px);
+  animation: fadeInDown 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-marquee {
+  display: flex;
+  animation: marquee 28s linear infinite;
+  width: max-content;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 18s linear infinite;
+}
+
+/* Shimmer loading skeleton */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--brand-linen) 0px,
+    rgba(240, 232, 223, 0.6) 200px,
+    var(--brand-linen) 400px
+  );
+  background-size: 600px;
+  animation: shimmer 1.4s infinite linear;
 }
 
 /* Stagger delays */
-.delay-100 {
-  animation-delay: 100ms;
-}
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
 
-.delay-200 {
-  animation-delay: 200ms;
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
-
-.delay-300 {
-  animation-delay: 300ms;
-}
-
-.delay-400 {
-  animation-delay: 400ms;
-}
-
-.delay-500 {
-  animation-delay: 500ms;
-}
-
-/* Global Smoothness */
-* {
-  @apply transition-all duration-300 ease-in-out;
-}
-
-/* Optimized scroll behavior */
-html {
-  scroll-behavior: smooth;
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
 }

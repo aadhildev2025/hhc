@@ -2,10 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api/client';
 import { useCart } from '../context/CartContext.jsx';
-import { FiShoppingCart, FiHeart, FiArrowLeft, FiTruck, FiRefreshCw, FiShield, FiStar, FiEdit3 } from 'react-icons/fi';
+import { FiShoppingCart, FiHeart, FiArrowLeft, FiTruck, FiRefreshCw, FiShield, FiEdit3, FiMinus, FiPlus } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import ReviewModal from '../components/ReviewModal';
 import SEO from '../components/SEO';
+
+const getImgSrc = (img) =>
+    img?.startsWith('http') ? img : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${img}`;
+
+const StarRating = ({ rating }) => (
+    <div className="flex items-center gap-0.5">
+        {[1, 2, 3, 4, 5].map(s => (
+            <svg key={s} width="14" height="14" viewBox="0 0 10 10" fill="none">
+                <path d="M5 1l1.09 2.26L8.5 3.64l-1.75 1.7.41 2.41L5 6.5 2.84 7.75l.41-2.41L1.5 3.64l2.41-.38L5 1z"
+                    fill={s <= Math.round(rating) ? 'var(--brand-gold)' : 'var(--brand-linen)'}
+                    stroke={s <= Math.round(rating) ? 'var(--brand-gold)' : 'var(--brand-border)'}
+                    strokeWidth="0.5" />
+            </svg>
+        ))}
+    </div>
+);
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -22,8 +38,7 @@ const ProductDetails = () => {
             const { data } = await api.get(`/products/${id}`);
             setProduct(data);
             setActiveImage(data.image);
-        } catch (error) {
-            console.error('Error fetching product:', error);
+        } catch {
             toast.error('Product not found');
             navigate('/shop');
         } finally {
@@ -31,198 +46,198 @@ const ProductDetails = () => {
         }
     };
 
-    useEffect(() => {
-        fetchProduct();
-    }, [id, navigate]);
+    useEffect(() => { fetchProduct(); }, [id]);
 
     const handleAddToCart = () => {
-        if (product.stock <= 0) {
-            toast.error('Sorry, this item is out of stock!');
-            return;
-        }
+        if (product.stock <= 0) { toast.error('Sorry, this item is out of stock!'); return; }
         addToCart(product, quantity);
         toast.success(`${product.name} added to cart!`);
     };
 
-    if (loading) return <div className="min-h-screen flex items-center justify-center pt-20"><div className="w-12 h-12 border-4 border-brand-pink-dark border-t-transparent rounded-full animate-spin"></div></div>;
+    if (loading) return (
+        <div className="min-h-screen flex items-center justify-center" style={{ paddingTop: '6rem' }}>
+            <div className="w-12 h-12 rounded-full border-4 border-t-transparent animate-spin"
+                style={{ borderColor: 'var(--brand-rose)', borderTopColor: 'transparent' }} />
+        </div>
+    );
     if (!product) return null;
 
+    const features = [
+        { icon: <FiTruck />, title: 'Fast Delivery', sub: '3–5 business days' },
+        { icon: <FiRefreshCw />, title: 'Easy Returns', sub: 'Return within 7 days' },
+        { icon: <FiShield />, title: 'Secure Shopping', sub: '100% safe checkout' },
+    ];
+
     return (
-        <div className="min-h-screen pt-28 pb-20 px-6 md:px-12 bg-brand-offwhite">
+        <div style={{ background: 'var(--brand-cream)', paddingTop: '5rem' }}>
             <SEO
                 title={product.name}
                 description={product.description}
-                image={product.image.startsWith('http') ? product.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${product.image}`}
+                image={getImgSrc(product.image)}
                 url={`/product/${product._id}`}
                 type="product"
             />
-            <div className="max-w-7xl mx-auto">
-                <button
-                    onClick={() => navigate(-1)}
-                    className="flex items-center space-x-2 text-brand-dark/60 hover:text-brand-pink-dark mb-8 transition-all animate-slide-down"
-                >
-                    <FiArrowLeft /> <span>Back to products</span>
-                </button>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-                    {/* Images Gallery */}
-                    <div className="space-y-6 animate-slide-up delay-100">
-                        <div className="aspect-square rounded-3xl overflow-hidden bg-brand-card border border-brand-border">
-                            <img
-                                src={activeImage.startsWith('http') ? activeImage : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${activeImage}`}
-                                alt={product.name}
-                                className="w-full h-full object-cover"
-                            />
+            {/* Breadcrumb */}
+            <div className="py-4 px-6 md:px-12" style={{ background: 'var(--brand-linen)', borderBottom: '1px solid var(--brand-border)' }}>
+                <div className="max-w-7xl mx-auto">
+                    <button onClick={() => navigate(-1)}
+                        className="flex items-center gap-2 text-sm font-medium transition-colors"
+                        style={{ color: 'var(--brand-muted)' }}
+                        onMouseEnter={e => e.currentTarget.style.color = 'var(--brand-rose)'}
+                        onMouseLeave={e => e.currentTarget.style.color = 'var(--brand-muted)'}>
+                        <FiArrowLeft size={15} /> Back to products
+                    </button>
+                </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-14">
+
+                    {/* ── IMAGE GALLERY ── */}
+                    <div className="space-y-4 animate-slide-up">
+                        <div className="aspect-square rounded-3xl overflow-hidden" style={{ background: 'var(--brand-linen)' }}>
+                            <img src={getImgSrc(activeImage)} alt={product.name}
+                                className="w-full h-full object-cover transition-all duration-500" />
                         </div>
-
-                        {product.images && product.images.length > 1 && (
-                            <div className="grid grid-cols-5 gap-4">
+                        {product.images?.length > 1 && (
+                            <div className="grid grid-cols-5 gap-3">
                                 {product.images.map((img, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => setActiveImage(img)}
-                                        className={`aspect-square rounded-xl overflow-hidden border-2 transition-all ${activeImage === img ? 'border-brand-pink-dark scale-95 shadow-lg' : 'border-transparent opacity-70 hover:opacity-100'}`}
-                                    >
-                                        <img
-                                            src={img.startsWith('http') ? img : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${img}`}
-                                            alt={`View ${i}`}
-                                            className="w-full h-full object-cover"
-                                        />
+                                    <button key={i} onClick={() => setActiveImage(img)}
+                                        className="aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200"
+                                        style={{
+                                            borderColor: activeImage === img ? 'var(--brand-rose)' : 'transparent',
+                                            opacity: activeImage === img ? 1 : 0.65,
+                                        }}
+                                        onMouseEnter={e => { if (activeImage !== img) e.currentTarget.style.opacity = '1'; }}
+                                        onMouseLeave={e => { if (activeImage !== img) e.currentTarget.style.opacity = '0.65'; }}>
+                                        <img src={getImgSrc(img)} alt={`View ${i + 1}`} className="w-full h-full object-cover" />
                                     </button>
                                 ))}
                             </div>
                         )}
                     </div>
 
-                    {/* Info Details */}
-                    <div className="space-y-8 animate-slide-up delay-200">
-                        <div className="space-y-4">
-                            <span className="text-brand-pink-dark font-bold uppercase tracking-widest text-xs px-3 py-1 bg-brand-pink/20 rounded-full inline-block">
+                    {/* ── PRODUCT INFO ── */}
+                    <div className="space-y-7 animate-slide-up delay-100">
+                        {/* Category + name */}
+                        <div className="space-y-3">
+                            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest"
+                                style={{ background: 'rgba(201,123,94,0.1)', color: 'var(--brand-rose)' }}>
                                 {product.category?.name || 'Handmade'}
                             </span>
-                            <h1 className="text-4xl md:text-5xl font-serif text-brand-dark">{product.name}</h1>
-                            <div className="flex items-center space-x-4">
-                                <span className="text-3xl font-bold text-brand-blue-dark">LKR {product.price.toLocaleString()}</span>
-                                <div className="flex items-center text-sm text-brand-dark/40">
-                                    <span className="text-brand-pink-dark mr-1 text-lg">★</span>
-                                    <span className="font-bold text-brand-dark mr-1">
-                                        {product.rating > 0 ? product.rating.toFixed(1) : 'New'}
-                                    </span>
-                                    ({product.numReviews || 0} reviews)
-                                </div>
+                            <h1 className="font-serif font-semibold leading-tight"
+                                style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: 'var(--brand-dark)' }}>
+                                {product.name}
+                            </h1>
+                            <div className="flex items-center gap-4 flex-wrap">
+                                <span className="font-bold text-3xl" style={{ color: 'var(--brand-rose)' }}>
+                                    LKR {product.price.toLocaleString()}
+                                </span>
+                                {product.rating > 0 && (
+                                    <div className="flex items-center gap-2">
+                                        <StarRating rating={product.rating} />
+                                        <span className="text-sm font-semibold" style={{ color: 'var(--brand-dark)' }}>{product.rating.toFixed(1)}</span>
+                                        <span className="text-xs" style={{ color: 'var(--brand-muted)' }}>({product.numReviews || 0} reviews)</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
-                        <p className="text-lg text-brand-dark/70 leading-relaxed border-b border-brand-beige pb-8">
+                        {/* Description */}
+                        <p className="text-base leading-relaxed pb-6" style={{ color: 'var(--brand-muted)', borderBottom: '1px solid var(--brand-border)' }}>
                             {product.description}
                         </p>
 
-                        <div className="space-y-6">
-                            <div className="flex items-center space-x-6">
-                                <div className="flex items-center bg-brand-card border border-brand-border rounded-xl overflow-hidden h-14">
-                                    <button
-                                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                        className="px-6 h-full hover:bg-brand-pink/10 transition-colors text-xl"
-                                    >
-                                        -
-                                    </button>
-                                    <span className="px-6 font-bold text-brand-dark text-lg">{quantity}</span>
-                                    <button
-                                        onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                                        className="px-6 h-full hover:bg-brand-pink/10 transition-colors text-xl"
-                                    >
-                                        +
-                                    </button>
-                                </div>
-                                <div className="text-sm font-medium text-brand-dark/60">
-                                    {product.stock > 0 ? (
-                                        <span className="text-brand-pink-dark">In Stock ({product.stock} available)</span>
-                                    ) : (
-                                        <span className="text-red-400">Out of Stock</span>
-                                    )}
-                                </div>
+                        {/* Quantity + stock */}
+                        <div className="flex items-center gap-5 flex-wrap">
+                            <div className="flex items-center rounded-xl border overflow-hidden" style={{ borderColor: 'var(--brand-border)' }}>
+                                <button onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                                    className="w-12 h-12 flex items-center justify-center transition-colors"
+                                    style={{ color: 'var(--brand-muted)' }}
+                                    onMouseEnter={e => e.currentTarget.style.background = 'var(--brand-linen)'}
+                                    onMouseLeave={e => e.currentTarget.style.background = ''}>
+                                    <FiMinus size={14} />
+                                </button>
+                                <span className="w-12 text-center font-bold text-base" style={{ color: 'var(--brand-dark)' }}>{quantity}</span>
+                                <button onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
+                                    className="w-12 h-12 flex items-center justify-center transition-colors"
+                                    style={{ color: 'var(--brand-muted)' }}
+                                    onMouseEnter={e => e.currentTarget.style.background = 'var(--brand-linen)'}
+                                    onMouseLeave={e => e.currentTarget.style.background = ''}>
+                                    <FiPlus size={14} />
+                                </button>
                             </div>
+                            <span className="text-sm font-medium" style={{ color: product.stock > 0 ? 'var(--brand-sage)' : '#ef4444' }}>
+                                {product.stock > 0 ? `✓ In Stock (${product.stock} available)` : '✗ Out of Stock'}
+                            </span>
+                        </div>
 
-                            <div className="flex space-x-4">
-                                <button
-                                    onClick={handleAddToCart}
-                                    disabled={product.stock <= 0}
-                                    className="flex-grow btn-primary h-14 flex items-center justify-center space-x-3 text-lg font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    <FiShoppingCart /> <span>Add to Cart</span>
-                                </button>
-                                <button className="w-14 h-14 rounded-xl border border-brand-pink/10 flex items-center justify-center text-xl text-brand-dark/60 hover:text-brand-pink-dark hover:border-brand-pink-dark transition-all">
-                                    <FiHeart />
-                                </button>
-                            </div>
+                        {/* CTA Buttons */}
+                        <div className="flex gap-3">
+                            <button onClick={handleAddToCart} disabled={product.stock <= 0}
+                                className="btn-primary flex-grow py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed">
+                                <FiShoppingCart size={18} /> Add to Cart
+                            </button>
+                            <button className="flex items-center justify-center w-14 h-14 rounded-xl border transition-all duration-200"
+                                style={{ borderColor: 'var(--brand-border)', color: 'var(--brand-muted)' }}
+                                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--brand-rose)'; e.currentTarget.style.color = 'var(--brand-rose)'; e.currentTarget.style.background = 'rgba(201,123,94,0.06)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--brand-border)'; e.currentTarget.style.color = 'var(--brand-muted)'; e.currentTarget.style.background = ''; }}>
+                                <FiHeart size={18} />
+                            </button>
                         </div>
 
                         {/* Features */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-8 border-t border-brand-border">
-                            <div className="flex items-center space-x-4">
-                                <div className="w-10 h-10 bg-brand-card rounded-lg flex items-center justify-center text-brand-pink-dark text-xl border border-brand-border"><FiTruck /></div>
-                                <div>
-                                    <h4 className="text-sm font-bold text-brand-dark">Fast Delivery</h4>
-                                    <p className="text-xs text-brand-dark/50">Within 3-5 business days</p>
+                        <div className="grid grid-cols-3 gap-4 pt-6" style={{ borderTop: '1px solid var(--brand-border)' }}>
+                            {features.map((f, i) => (
+                                <div key={i} className="flex flex-col items-center text-center gap-2 p-3 rounded-xl"
+                                    style={{ background: 'var(--brand-linen)' }}>
+                                    <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: 'rgba(201,123,94,0.1)', color: 'var(--brand-rose)' }}>{f.icon}</div>
+                                    <div>
+                                        <p className="text-xs font-bold" style={{ color: 'var(--brand-dark)' }}>{f.title}</p>
+                                        <p className="text-[10px]" style={{ color: 'var(--brand-muted)' }}>{f.sub}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="flex items-center space-x-4">
-                                <div className="w-10 h-10 bg-brand-card rounded-lg flex items-center justify-center text-brand-pink-dark text-xl border border-brand-border"><FiRefreshCw /></div>
-                                <div>
-                                    <h4 className="text-sm font-bold text-brand-dark">Easy Returns</h4>
-                                    <p className="text-xs text-brand-dark/50">Return within 7 days</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-4">
-                                <div className="w-10 h-10 bg-brand-card rounded-lg flex items-center justify-center text-brand-pink-dark text-xl border border-brand-border"><FiShield /></div>
-                                <div>
-                                    <h4 className="text-sm font-bold text-brand-dark">Secure Shopping</h4>
-                                    <p className="text-xs text-brand-dark/50">100% safe checkout</p>
-                                </div>
-                            </div>
+                            ))}
                         </div>
 
-                        {/* Reviews Section */}
-                        <div className="pt-12 border-t border-brand-border space-y-8">
+                        {/* Reviews */}
+                        <div className="space-y-6 pt-6" style={{ borderTop: '1px solid var(--brand-border)' }}>
                             <div className="flex items-center justify-between">
-                                <h3 className="text-2xl font-serif text-brand-dark">Customer Reviews</h3>
-                                <button
-                                    onClick={() => setIsReviewModalOpen(true)}
-                                    className="flex items-center space-x-2 text-brand-pink-dark font-bold hover:bg-brand-pink/10 px-4 py-2 rounded-xl transition-all"
-                                >
-                                    <FiEdit3 /> <span>Write a Review</span>
+                                <h3 className="font-serif font-semibold text-xl" style={{ color: 'var(--brand-dark)' }}>Customer Reviews</h3>
+                                <button onClick={() => setIsReviewModalOpen(true)}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all"
+                                    style={{ color: 'var(--brand-rose)' }}
+                                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(201,123,94,0.08)'}
+                                    onMouseLeave={e => e.currentTarget.style.background = ''}>
+                                    <FiEdit3 size={14} /> Write a Review
                                 </button>
                             </div>
 
-                            {product.reviews && product.reviews.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {product.reviews.map((review, i) => (
-                                        <div key={i} className="p-6 bg-white/40 backdrop-blur-md rounded-2xl border border-brand-pink/10 space-y-4">
-                                            <div className="flex items-center justify-between">
-                                                <h4 className="font-bold text-brand-dark">{review.name}</h4>
-                                                <div className="flex text-brand-pink-dark text-xs">
-                                                    {[...Array(5)].map((_, i) => (
-                                                        <FiStar key={i} className={i < review.rating ? 'fill-brand-pink-dark' : 'text-brand-dark/10'} />
-                                                    ))}
+                            {product.reviews?.length > 0 ? (
+                                <div className="space-y-4 max-h-80 overflow-y-auto pr-1">
+                                    {product.reviews.map((r, i) => (
+                                        <div key={i} className="p-5 rounded-2xl space-y-2" style={{ background: 'var(--brand-linen)', border: '1px solid var(--brand-border)' }}>
+                                            <div className="flex items-center justify-between gap-3">
+                                                <span className="font-bold text-sm" style={{ color: 'var(--brand-dark)' }}>{r.name}</span>
+                                                <div className="flex items-center gap-2">
+                                                    <StarRating rating={r.rating} />
+                                                    <span className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--brand-muted)' }}>
+                                                        {new Date(r.createdAt).toLocaleDateString()}
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <p className="text-sm text-brand-dark/70 leading-relaxed italic">
-                                                "{review.comment}"
-                                            </p>
-                                            <p className="text-[10px] text-brand-dark/30 uppercase tracking-widest font-bold">
-                                                {new Date(review.createdAt).toLocaleDateString()}
-                                            </p>
+                                            <p className="text-sm leading-relaxed italic" style={{ color: 'var(--brand-muted)' }}>"{r.comment}"</p>
                                         </div>
                                     ))}
                                 </div>
                             ) : (
-                                <div className="p-12 text-center bg-brand-pink/5 rounded-3xl border border-brand-pink/10 border-dashed">
-                                    <p className="text-brand-dark/40 mb-4 italic">No reviews yet. Be the first to share your thoughts!</p>
-                                    <button
-                                        onClick={() => setIsReviewModalOpen(true)}
-                                        className="text-brand-pink-dark font-bold hover:underline"
-                                    >
-                                        Leave a review
+                                <div className="text-center py-10 rounded-2xl border border-dashed" style={{ borderColor: 'var(--brand-border)' }}>
+                                    <p className="text-sm italic mb-3" style={{ color: 'var(--brand-muted)' }}>No reviews yet. Be the first to share your thoughts!</p>
+                                    <button onClick={() => setIsReviewModalOpen(true)}
+                                        className="text-sm font-semibold transition-colors"
+                                        style={{ color: 'var(--brand-rose)' }}>
+                                        Leave a Review →
                                     </button>
                                 </div>
                             )}

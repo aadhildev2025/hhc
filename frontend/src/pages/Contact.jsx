@@ -1,127 +1,126 @@
-import { FiMail, FiPhone, FiMapPin, FiInstagram } from 'react-icons/fi';
+import { useState } from 'react';
+import { FiMail, FiPhone, FiMapPin, FiInstagram, FiSend } from 'react-icons/fi';
 import { FaWhatsapp, FaFacebook } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import api from '../api/client';
 import SEO from '../components/SEO';
 
 const Contact = () => {
+    const [sending, setSending] = useState(false);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setSending(true);
         const formData = {
             name: e.target[0].value,
             email: e.target[1].value,
             subject: e.target[2].value,
             message: e.target[3].value,
         };
-
         try {
             await api.post('/messages', formData);
             toast.success('Message sent! We will get back to you soon.');
             e.target.reset();
-        } catch (error) {
-            console.error('Error sending message:', error);
+        } catch (err) {
             toast.error('Failed to send message. Please try again.');
+        } finally {
+            setSending(false);
         }
     };
 
+    const contactCards = [
+        { icon: <FiMapPin />, label: 'Our Studio', value: '173/B Madurankuliya, Puttalam, Sri Lanka', color: 'var(--brand-rose)' },
+        { icon: <FiMail />, label: 'Email Us', value: 'hello@homeheartcreation.com', color: 'var(--brand-sage)', href: 'mailto:hello@homeheartcreation.com' },
+        { icon: <FiPhone />, label: 'Call Us', value: '+94 76 060 1163', color: 'var(--brand-rose)', href: 'tel:+94760601163' },
+    ];
+
     return (
-        <div className="min-h-screen pt-24 bg-brand-offwhite">
-            <SEO
-                title="Contact Us"
-                description="Have questions? Get in touch with HomeHeartCreation. We're here to help with your handmade decor and personalized gift inquiries."
-                url="/contact"
-            />
-            {/* Header */}
-            <div className="bg-brand-card/30 backdrop-blur-sm py-20 px-6 text-center animate-slide-down border-b border-brand-border">
-                <h1 className="text-5xl md:text-6xl font-serif text-brand-dark">Get in Touch</h1>
-                <p className="mt-4 text-brand-dark/60 max-w-lg mx-auto">We'd love to hear from you. Whether you have a question about our products or just want to say hi!</p>
+        <div style={{ background: 'var(--brand-cream)', paddingTop: '5rem' }}>
+            <SEO title="Contact Us" description="Have questions? Get in touch with HomeHeartCreation." url="/contact" />
+
+            {/* HEADER */}
+            <div className="py-16 px-6 text-center" style={{ background: 'var(--brand-linen)', borderBottom: '1px solid var(--brand-border)' }}>
+                <div className="max-w-xl mx-auto animate-slide-down">
+                    <span className="section-label">Get in Touch</span>
+                    <h1 className="section-title mt-3" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)' }}>We'd Love to Hear<br />From You</h1>
+                    <p className="mt-4 text-sm leading-relaxed" style={{ color: 'var(--brand-muted)' }}>
+                        Whether you have a question about our products or want a custom order — we're here for you!
+                    </p>
+                </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-6 md:px-12 py-24">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-                    {/* Form */}
-                    <div className="bg-brand-card backdrop-blur-md p-8 md:p-12 rounded-[2.5rem] shadow-lg border border-brand-border animate-slide-up delay-100 lg:order-2">
-                        <h3 className="text-2xl font-serif text-brand-dark mb-8">Send us a Message</h3>
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-brand-dark/70">Name</label>
-                                <input required type="text" className="w-full p-4 bg-brand-offwhite/50 border border-brand-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-pink-dark/50 text-brand-dark" />
+            <div className="max-w-7xl mx-auto px-6 md:px-12 py-20">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+
+                    {/* CONTACT INFO */}
+                    <div className="space-y-10 animate-slide-up delay-100 lg:order-1">
+                        <div className="space-y-4">
+                            {contactCards.map((c, i) => (
+                                <a key={i} href={c.href || '#'} className={`flex items-start gap-5 p-5 rounded-2xl border transition-all duration-200 group ${c.href ? 'cursor-pointer' : ''}`}
+                                    style={{ background: 'var(--brand-card-bg)', borderColor: 'var(--brand-border)' }}
+                                    onMouseEnter={e => { if (c.href) { e.currentTarget.style.borderColor = c.color; e.currentTarget.style.boxShadow = `0 8px 24px rgba(28,20,16,0.08)`; } }}
+                                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--brand-border)'; e.currentTarget.style.boxShadow = ''; }}>
+                                    <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 text-lg" style={{ background: `${c.color}18`, color: c.color }}>{c.icon}</div>
+                                    <div>
+                                        <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: 'var(--brand-muted)' }}>{c.label}</p>
+                                        <p className="text-sm font-medium" style={{ color: 'var(--brand-dark)' }}>{c.value}</p>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+
+                        {/* Social */}
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-widest mb-5" style={{ color: 'var(--brand-muted)' }}>Follow Our Journey</p>
+                            <div className="flex gap-3">
+                                {[
+                                    { icon: <FaFacebook size={20} />, href: 'https://www.facebook.com/share/1Besh5q7ZA/?mibextid=wwXIfr', hover: '#1877F2', label: 'Facebook' },
+                                    { icon: <FiInstagram size={20} />, href: 'https://www.instagram.com/homeheartcreation/', hover: 'var(--brand-rose)', label: 'Instagram' },
+                                    { icon: <FaWhatsapp size={20} />, href: 'https://wa.me/94760601163?text=Hello%20HomeHeartCreation', hover: '#25D366', label: 'WhatsApp' },
+                                ].map((s, i) => (
+                                    <a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
+                                        className="flex items-center gap-2.5 px-5 py-3 rounded-xl border font-medium text-sm transition-all duration-200"
+                                        style={{ borderColor: 'var(--brand-border)', color: 'var(--brand-dark)', background: 'var(--brand-card-bg)' }}
+                                        onMouseEnter={e => { e.currentTarget.style.borderColor = s.hover; e.currentTarget.style.color = s.hover; e.currentTarget.style.background = `${s.hover}10`; }}
+                                        onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--brand-border)'; e.currentTarget.style.color = 'var(--brand-dark)'; e.currentTarget.style.background = 'var(--brand-card-bg)'; }}>
+                                        {s.icon} {s.label}
+                                    </a>
+                                ))}
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-brand-dark/70">Email</label>
-                                <input required type="email" className="w-full p-4 bg-brand-offwhite/50 border border-brand-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-pink-dark/50 text-brand-dark" />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-brand-dark/70">Subject</label>
-                                <input required type="text" className="w-full p-4 bg-brand-offwhite/50 border border-brand-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-pink-dark/50 text-brand-dark" />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-brand-dark/70">Message</label>
-                                <textarea required rows="6" className="w-full p-4 bg-brand-offwhite/50 border border-brand-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-pink-dark/50 text-brand-dark"></textarea>
-                            </div>
-                            <button type="submit" className="w-full btn-primary h-16 flex items-center justify-center space-x-3 text-lg font-bold shadow-lg shadow-brand-pink-dark/20">
-                                <span>Send Message</span> <FiMail />
-                            </button>
-                        </form>
+                        </div>
+
+                        {/* Map */}
+                        <div className="rounded-2xl overflow-hidden border" style={{ height: '240px', borderColor: 'var(--brand-border)' }}>
+                            <iframe src="https://maps.google.com/maps?q=7.907996,79.801420&hl=en&z=15&output=embed"
+                                width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade" title="HomeHeartCreation Location" />
+                        </div>
                     </div>
 
-                    {/* Contact Info */}
-                    <div className="space-y-12 animate-slide-up delay-200 lg:order-1">
-                        <h2 className="text-4xl font-serif text-brand-dark">Contact Information</h2>
-
-                        <div className="space-y-8">
-                            <div className="flex items-start space-x-6">
-                                <div className="w-12 h-12 bg-brand-pink/20 text-brand-pink-dark rounded-full flex items-center justify-center text-xl shadow-inner flex-shrink-0">
-                                    <FiMapPin />
-                                </div>
+                    {/* FORM */}
+                    <div className="animate-slide-up delay-200 lg:order-2">
+                        <div className="glass-card p-8 md:p-10 rounded-3xl">
+                            <h3 className="font-serif font-semibold text-2xl mb-8" style={{ color: 'var(--brand-dark)' }}>Send Us a Message</h3>
+                            <form onSubmit={handleSubmit} className="space-y-5">
+                                {[
+                                    { label: 'Your Name', type: 'text', placeholder: 'John Doe' },
+                                    { label: 'Email Address', type: 'email', placeholder: 'john@example.com' },
+                                    { label: 'Subject', type: 'text', placeholder: 'Custom order inquiry…' },
+                                ].map((field, i) => (
+                                    <div key={i}>
+                                        <label className="block text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--brand-muted)' }}>{field.label}</label>
+                                        <input required type={field.type} placeholder={field.placeholder} className="input-base w-full" />
+                                    </div>
+                                ))}
                                 <div>
-                                    <h4 className="font-bold text-brand-dark">Our Studio</h4>
-                                    <p className="text-brand-dark/60">173/B Madurankuliya Puttalam Sri Lanka</p>
+                                    <label className="block text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--brand-muted)' }}>Message</label>
+                                    <textarea required rows={5} placeholder="Tell us how we can help…" className="input-base w-full resize-none" />
                                 </div>
-                            </div>
-
-                            <div className="flex items-start space-x-6">
-                                <div className="w-12 h-12 bg-brand-blue/20 text-brand-blue-dark rounded-full flex items-center justify-center text-xl shadow-inner flex-shrink-0">
-                                    <FiMail />
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-brand-dark">Email Us</h4>
-                                    <p className="text-brand-dark/60">hello@homeheartcreation.com</p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start space-x-6">
-                                <div className="w-12 h-12 bg-brand-pink/20 text-brand-pink-dark rounded-full flex items-center justify-center text-xl shadow-inner flex-shrink-0">
-                                    <FiPhone />
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-brand-dark">Call Us</h4>
-                                    <p className="text-brand-dark/60">+94 76 060 1163</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4 pt-12 border-t border-brand-pink/10">
-                            <h4 className="font-bold text-brand-dark uppercase tracking-widest text-xs">Follow Our Journey</h4>
-                            <div className="flex space-x-6 text-3xl text-brand-blue-dark">
-                                <a href="https://www.facebook.com/share/1Besh5q7ZA/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition-all duration-300 hover:scale-110"><FaFacebook /></a>
-                                <a href="https://www.instagram.com/homeheartcreation/?igsh=Y3RydDRhbmVkdzhv#" target="_blank" rel="noopener noreferrer" className="hover:text-brand-pink-dark transition-all duration-300 hover:scale-110"><FiInstagram /></a>
-                                <a href="https://wa.me/94760601163?text=Hello%20HomeHeartCreation" target="_blank" rel="noopener noreferrer" className="hover:text-green-500 transition-all duration-300 hover:scale-110"><FaWhatsapp /></a>
-                            </div>
-                        </div>
-
-                        {/* Google Maps */}
-                        <div className="h-64 rounded-3xl overflow-hidden shadow-lg border border-brand-border">
-                            <iframe
-                                src="https://maps.google.com/maps?q=7.907996,79.801420&hl=en&z=15&output=embed"
-                                width="100%"
-                                height="100%"
-                                style={{ border: 0 }}
-                                allowFullScreen=""
-                                loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
-                                title="HomeHeartCreation Location"
-                            ></iframe>
+                                <button type="submit" disabled={sending}
+                                    className="btn-primary w-full py-4 text-base disabled:opacity-60 disabled:cursor-not-allowed">
+                                    {sending ? 'Sending…' : <><FiSend size={16} /> Send Message</>}
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

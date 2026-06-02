@@ -10,42 +10,39 @@ const Shop = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchParams, setSearchParams] = useSearchParams();
-
     const [search, setSearch] = useState(searchParams.get('search') || '');
     const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
     const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
     const [showFilters, setShowFilters] = useState(false);
-    const [sortByOpen, setSortByOpen] = useState(false);
+    const [sortOpen, setSortOpen] = useState(false);
+    const [debouncedSearch, setDebouncedSearch] = useState(search);
 
     const sortOptions = [
         { id: 'newest', label: 'Newest First' },
         { id: 'price-asc', label: 'Price: Low to High' },
-        { id: 'price-desc', label: 'Price: High to Low' }
+        { id: 'price-desc', label: 'Price: High to Low' },
     ];
 
-    const [debouncedSearch, setDebouncedSearch] = useState(search);
-
-    // Sync state with URL parameters
     useEffect(() => {
-        const searchParam = searchParams.get('search') || '';
-        const categoryParam = searchParams.get('category') || '';
-        const sortParam = searchParams.get('sort') || 'newest';
+        const t = setTimeout(() => setDebouncedSearch(search), 400);
+        return () => clearTimeout(t);
+    }, [search]);
 
-        if (searchParam !== search) setSearch(searchParam);
-        if (categoryParam !== selectedCategory) setSelectedCategory(categoryParam);
-        if (sortParam !== sortBy) setSortBy(sortParam);
-
-        // Scroll to top when filters change
+    useEffect(() => {
+        const p = searchParams.get('search') || '';
+        const c = searchParams.get('category') || '';
+        const s = searchParams.get('sort') || 'newest';
+        if (p !== search) setSearch(p);
+        if (c !== selectedCategory) setSelectedCategory(c);
+        if (s !== sortBy) setSortBy(s);
         window.scrollTo(0, 0);
     }, [searchParams]);
 
-    // Update URL when state changes
     useEffect(() => {
         const params = {};
         if (debouncedSearch) params.search = debouncedSearch;
         if (selectedCategory) params.category = selectedCategory;
         if (sortBy !== 'newest') params.sort = sortBy;
-
         setSearchParams(params, { replace: true });
     }, [debouncedSearch, selectedCategory, sortBy]);
 
@@ -53,137 +50,133 @@ const Shop = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const queryParams = new URLSearchParams({
-                    search: debouncedSearch,
-                    category: selectedCategory,
-                    sort: sortBy
-                });
-
-                console.log('Fetching products with:', queryParams.toString());
-
-                const [prodRes, catRes] = await Promise.all([
-                    api.get(`/products?${queryParams.toString()}`),
-                    api.get('/categories')
-                ]);
-
-                // API now returns { products, page, pages, total }
-                if (prodRes.data && prodRes.data.products) {
-                    setProducts(prodRes.data.products);
-                } else {
-                    setProducts(prodRes.data);
-                }
+                const q = new URLSearchParams({ search: debouncedSearch, category: selectedCategory, sort: sortBy });
+                const [prodRes, catRes] = await Promise.all([api.get(`/products?${q}`), api.get('/categories')]);
+                setProducts(prodRes.data?.products ?? prodRes.data);
                 setCategories(catRes.data);
-            } catch (error) {
-                console.error('Error fetching shop data:', error);
-            } finally {
-                setLoading(false);
-            }
+            } catch (err) { console.error(err); }
+            finally { setLoading(false); }
         };
         fetchData();
     }, [debouncedSearch, selectedCategory, sortBy]);
 
-    const clearFilters = () => {
-        setSearchParams({});
-    };
+    const clearFilters = () => setSearchParams({});
+    const hasFilters = search || selectedCategory || sortBy !== 'newest';
 
     return (
-        <div className="min-h-screen pt-24 pb-20 px-6 md:px-12 bg-brand-offwhite">
-            <SEO
-                title="Shop All"
-                description="Browse our wide collection of handmade wall art, planters, and personalized gifts. Find the perfect piece for your home."
-                url="/shop"
-            />
-            <div className="max-w-7xl mx-auto space-y-12">
-                {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 animate-slide-down">
-                    <div className="space-y-2">
-                        <h1 className="text-4xl md:text-5xl font-serif text-brand-dark">Our Collection</h1>
-                        <p className="text-brand-dark/60">Discover unique handmade items for your beautiful home.</p>
-                    </div>
+        <div className="min-h-screen" style={{ background: 'var(--brand-cream)', paddingTop: '5rem' }}>
+            <SEO title="Shop All" description="Browse our wide collection of handmade wall art, planters, and personalized gifts." url="/shop" />
 
-                    <div className="flex items-center space-x-4">
-                        <div className="relative flex-grow md:w-64">
-                            <input
-                                type="text"
-                                placeholder="Search products..."
-                                className="w-full pl-10 pr-4 py-3 bg-brand-card border border-brand-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-pink-dark/50 text-brand-dark"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
-                            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-dark/40" />
-                        </div>
-                        <button
-                            onClick={() => setShowFilters(!showFilters)}
-                            className={`p-3 rounded-xl border transition-all ${showFilters ? 'bg-brand-pink-dark text-white border-brand-pink-dark' : 'border-brand-pink/20 text-brand-dark hover:bg-brand-pink/10'}`}
-                        >
-                            <FiFilter />
-                        </button>
+            {/* Page Header */}
+            <div className="py-16 px-6 md:px-12" style={{ background: 'var(--brand-linen)', borderBottom: '1px solid var(--brand-border)' }}>
+                <div className="max-w-7xl mx-auto">
+                    <span className="section-label">All Products</span>
+                    <h1 className="section-title mt-2">Our Collection</h1>
+                    <p className="mt-3 text-sm" style={{ color: 'var(--brand-muted)' }}>Discover unique handmade items for your beautiful home.</p>
+                </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto px-6 md:px-12 py-10">
+                {/* Search + filter bar */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-8">
+                    <div className="relative flex-grow max-w-md">
+                        <input type="text" placeholder="Search products…" value={search} onChange={e => setSearch(e.target.value)}
+                            className="input-base pl-10 pr-4 w-full" />
+                        <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--brand-muted)' }} />
+                        {search && (
+                            <button onClick={() => setSearch('')} className="absolute right-3.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--brand-muted)' }}>
+                                <FiX size={14} />
+                            </button>
+                        )}
                     </div>
+                    <button onClick={() => setShowFilters(!showFilters)}
+                        className="flex items-center gap-2 px-4 py-3 rounded-xl border font-medium text-sm transition-all duration-200 sm:w-auto w-full justify-center"
+                        style={{
+                            borderColor: showFilters ? 'var(--brand-rose)' : 'var(--brand-border)',
+                            background: showFilters ? 'var(--brand-rose)' : 'var(--brand-card-bg)',
+                            color: showFilters ? '#fff' : 'var(--brand-dark)',
+                        }}>
+                        <FiFilter size={15} /> {showFilters ? 'Hide Filters' : 'Filter & Sort'}
+                    </button>
+                    {hasFilters && (
+                        <button onClick={clearFilters} className="flex items-center gap-1.5 px-4 py-3 rounded-xl text-sm font-medium transition-all"
+                            style={{ color: 'var(--brand-rose)', background: 'rgba(201,123,94,0.08)' }}>
+                            <FiX size={14} /> Clear All
+                        </button>
+                    )}
                 </div>
 
-                <div className="flex flex-col lg:flex-row gap-12 animate-slide-up delay-100">
-                    {/* Sidebar Filters */}
-                    <aside className={`lg:w-64 space-y-8 ${showFilters ? 'block' : 'hidden lg:block'}`}>
-                        <div className="space-y-6">
-                            <div className="flex items-center justify-between">
-                                <h3 className="font-bold text-brand-dark uppercase tracking-widest text-sm">Categories</h3>
-                                {(search || selectedCategory || sortBy !== 'newest') && (
-                                    <button onClick={clearFilters} className="text-xs text-brand-pink-dark hover:underline flex items-center">
-                                        <FiX className="mr-1" /> Clear
-                                    </button>
-                                )}
-                            </div>
-                            <div className="space-y-3">
-                                <button
-                                    onClick={() => setSelectedCategory('')}
-                                    className={`w-full text-left px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${selectedCategory === '' ? 'bg-brand-pink-dark text-white shadow-md' : 'hover:bg-brand-pink/10 text-brand-dark/70'}`}
-                                >
+                {/* Active filter chips */}
+                {hasFilters && (
+                    <div className="flex flex-wrap gap-2 mb-6">
+                        {search && (
+                            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold"
+                                style={{ background: 'rgba(201,123,94,0.12)', color: 'var(--brand-rose)' }}>
+                                "{search}" <button onClick={() => setSearch('')}><FiX size={10} /></button>
+                            </span>
+                        )}
+                        {selectedCategory && categories.find(c => c._id === selectedCategory) && (
+                            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold"
+                                style={{ background: 'rgba(107,143,126,0.12)', color: 'var(--brand-sage)' }}>
+                                {categories.find(c => c._id === selectedCategory)?.name}
+                                <button onClick={() => setSelectedCategory('')}><FiX size={10} /></button>
+                            </span>
+                        )}
+                        {sortBy !== 'newest' && (
+                            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold"
+                                style={{ background: 'rgba(201,163,76,0.12)', color: 'var(--brand-gold)' }}>
+                                {sortOptions.find(o => o.id === sortBy)?.label}
+                                <button onClick={() => setSortBy('newest')}><FiX size={10} /></button>
+                            </span>
+                        )}
+                    </div>
+                )}
+
+                <div className="flex flex-col lg:flex-row gap-10">
+                    {/* SIDEBAR */}
+                    <aside className={`${showFilters ? 'block' : 'hidden lg:block'} lg:w-60 shrink-0 space-y-8`}>
+                        {/* Categories */}
+                        <div>
+                            <h3 className="font-semibold text-xs uppercase tracking-widest mb-4" style={{ color: 'var(--brand-muted)' }}>Categories</h3>
+                            <div className="space-y-1">
+                                <button onClick={() => setSelectedCategory('')}
+                                    className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
+                                    style={{ background: !selectedCategory ? 'var(--brand-rose)' : 'transparent', color: !selectedCategory ? '#fff' : 'var(--brand-muted)' }}>
                                     All Categories
                                 </button>
-                                {categories.map((cat) => (
-                                    <button
-                                        key={cat._id}
-                                        onClick={() => setSelectedCategory(cat._id)}
-                                        className={`w-full text-left px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${selectedCategory === cat._id || selectedCategory === cat.name ? 'bg-brand-pink-dark text-white shadow-md' : 'hover:bg-brand-pink/10 text-brand-dark/70'}`}
-                                    >
+                                {categories.map(cat => (
+                                    <button key={cat._id} onClick={() => setSelectedCategory(cat._id)}
+                                        className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
+                                        style={{ background: selectedCategory === cat._id ? 'var(--brand-rose)' : 'transparent', color: selectedCategory === cat._id ? '#fff' : 'var(--brand-muted)' }}
+                                        onMouseEnter={e => { if (selectedCategory !== cat._id) e.currentTarget.style.background = 'rgba(201,123,94,0.08)'; }}
+                                        onMouseLeave={e => { if (selectedCategory !== cat._id) e.currentTarget.style.background = 'transparent'; }}>
                                         {cat.name}
                                     </button>
                                 ))}
                             </div>
                         </div>
-
-                        <div className="space-y-6">
-                            <h3 className="font-bold text-brand-dark uppercase tracking-widest text-sm">Sort By</h3>
+                        {/* Sort */}
+                        <div>
+                            <h3 className="font-semibold text-xs uppercase tracking-widest mb-4" style={{ color: 'var(--brand-muted)' }}>Sort By</h3>
                             <div className="relative">
-                                <button
-                                    onClick={() => setSortByOpen(!sortByOpen)}
-                                    className="w-full flex items-center justify-between p-4 bg-brand-card border border-brand-border rounded-2xl text-brand-dark group hover:border-brand-pink-dark/30 transition-all duration-300 gap-2"
-                                >
-                                    <span className="font-medium whitespace-nowrap overflow-hidden text-ellipsis text-left flex-grow">
-                                        {sortOptions.find(opt => opt.id === sortBy)?.label || 'Newest First'}
-                                    </span>
-                                    <FiChevronDown className={`transition-transform duration-300 shrink-0 ${sortByOpen ? 'rotate-180' : ''} text-brand-pink-dark`} />
+                                <button onClick={() => setSortOpen(!sortOpen)}
+                                    className="w-full flex items-center justify-between px-4 py-3 rounded-xl border text-sm font-medium transition-all"
+                                    style={{ background: 'var(--brand-card-bg)', borderColor: 'var(--brand-border)', color: 'var(--brand-dark)' }}>
+                                    <span>{sortOptions.find(o => o.id === sortBy)?.label}</span>
+                                    <FiChevronDown className={`transition-transform duration-300 ${sortOpen ? 'rotate-180' : ''}`} style={{ color: 'var(--brand-rose)' }} />
                                 </button>
-
-                                {sortByOpen && (
+                                {sortOpen && (
                                     <>
-                                        <div
-                                            className="fixed inset-0 z-10"
-                                            onClick={() => setSortByOpen(false)}
-                                        ></div>
-                                        <div className="absolute top-full left-0 w-full mt-2 bg-brand-card border border-brand-border rounded-2xl shadow-xl z-20 overflow-hidden animate-slide-up py-2 backdrop-blur-xl bg-white/90">
-                                            {sortOptions.map((option) => (
-                                                <button
-                                                    key={option.id}
-                                                    onClick={() => {
-                                                        setSortBy(option.id);
-                                                        setSortByOpen(false);
-                                                    }}
-                                                    className={`w-full text-left px-6 py-3 text-sm transition-all duration-200 whitespace-nowrap ${sortBy === option.id
-                                                        ? 'text-brand-pink-dark font-bold bg-brand-pink/5'
-                                                        : 'text-brand-dark/70 hover:bg-brand-pink/5 hover:text-brand-pink-dark'}`}
-                                                >
-                                                    {option.label}
+                                        <div className="fixed inset-0 z-10" onClick={() => setSortOpen(false)} />
+                                        <div className="absolute top-full left-0 w-full mt-2 rounded-xl border shadow-xl z-20 overflow-hidden py-1"
+                                            style={{ background: 'var(--brand-card-bg)', borderColor: 'var(--brand-border)', backdropFilter: 'blur(12px)' }}>
+                                            {sortOptions.map(opt => (
+                                                <button key={opt.id} onClick={() => { setSortBy(opt.id); setSortOpen(false); }}
+                                                    className="w-full text-left px-4 py-3 text-sm transition-all"
+                                                    style={{ color: sortBy === opt.id ? 'var(--brand-rose)' : 'var(--brand-muted)', fontWeight: sortBy === opt.id ? 600 : 400 }}
+                                                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(201,123,94,0.06)'}
+                                                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                                                    {opt.label}
                                                 </button>
                                             ))}
                                         </div>
@@ -193,26 +186,25 @@ const Shop = () => {
                         </div>
                     </aside>
 
-                    {/* Product Grid */}
+                    {/* GRID */}
                     <div className="flex-grow">
                         {loading ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                                {[...Array(6)].map((_, i) => (
-                                    <div key={i} className="bg-brand-pink/5 rounded-2xl h-96 animate-pulse border border-brand-pink/10"></div>
-                                ))}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {[...Array(6)].map((_, i) => <div key={i} className="h-80 rounded-2xl shimmer" />)}
                             </div>
                         ) : products.length > 0 ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                                {products.map((product) => (
-                                    <ProductCard key={product._id} product={product} />
-                                ))}
-                            </div>
+                            <>
+                                <p className="text-sm mb-6" style={{ color: 'var(--brand-muted)' }}>{products.length} product{products.length !== 1 ? 's' : ''} found</p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {products.map(p => <ProductCard key={p._id} product={p} />)}
+                                </div>
+                            </>
                         ) : (
-                            <div className="text-center py-20 space-y-4">
-                                <div className="text-5xl text-brand-pink/20">🔍</div>
-                                <h3 className="text-2xl font-serif text-brand-dark">No products found</h3>
-                                <p className="text-brand-dark/60">Try adjusting your search or filters.</p>
-                                <button onClick={clearFilters} className="btn-primary">Clear All Filters</button>
+                            <div className="text-center py-24 space-y-4">
+                                <div className="text-6xl">🔍</div>
+                                <h3 className="section-title" style={{ fontSize: '1.8rem' }}>No products found</h3>
+                                <p className="text-sm" style={{ color: 'var(--brand-muted)' }}>Try adjusting your search or filters.</p>
+                                <button onClick={clearFilters} className="btn-primary mt-4">Clear All Filters</button>
                             </div>
                         )}
                     </div>
