@@ -113,18 +113,18 @@ const Home = () => {
                     <div className="divider-rose mx-auto mt-4" />
                 </div>
                 {loading ? (
-                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">{[...Array(6)].map((_, i) => <div key={i} className="h-64 rounded-2xl shimmer" />)}</div>
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">{[...Array(6)].map((_, i) => <div key={i} className="h-[240px] md:h-[280px] rounded-2xl shimmer" />)}</div>
                 ) : (
                     <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                         {categories.map((cat, index) => (
                             <Link key={cat._id} to={`/shop?category=${cat._id}`}
-                                className={`reveal group relative overflow-hidden rounded-2xl ${index === 0 ? 'lg:row-span-2' : ''}`}
-                                style={{ height: index === 0 ? undefined : '200px', minHeight: index === 0 ? '424px' : undefined, animationDelay: `${index * 80}ms` }}>
+                                className="reveal group relative overflow-hidden rounded-2xl h-[240px] md:h-[280px]"
+                                style={{ animationDelay: `${index * 80}ms` }}>
                                 <img src={cat.image?.startsWith('http') ? cat.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${cat.image || ''}`}
                                     alt={cat.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
                                     onError={e => { e.target.src = 'https://images.unsplash.com/photo-1459231905403-7c5b62859941?w=800&q=80'; }} />
                                 <div className="absolute inset-0 flex flex-col justify-end p-6" style={{ background: 'linear-gradient(to top, rgba(28,20,16,0.75) 0%, transparent 60%)' }}>
-                                    <h3 className="font-serif text-white font-semibold" style={{ fontSize: index === 0 ? '1.5rem' : '1.1rem' }}>{cat.name}</h3>
+                                    <h3 className="font-serif text-white font-semibold text-lg md:text-xl">{cat.name}</h3>
                                     <p className="text-xs mt-1 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300" style={{ color: 'rgba(255,255,255,0.75)' }}>{cat.description}</p>
                                 </div>
                             </Link>

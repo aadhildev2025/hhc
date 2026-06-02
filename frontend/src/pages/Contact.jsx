@@ -52,8 +52,35 @@ const Contact = () => {
             <div className="max-w-7xl mx-auto px-6 md:px-12 py-20">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
 
+                    {/* FORM */}
+                    <div className="animate-slide-up delay-100 lg:order-2">
+                        <div className="glass-card p-8 md:p-10 rounded-3xl">
+                            <h3 className="font-serif font-semibold text-2xl mb-8" style={{ color: 'var(--brand-dark)' }}>Send Us a Message</h3>
+                            <form onSubmit={handleSubmit} className="space-y-5">
+                                {[
+                                    { label: 'Your Name', type: 'text', placeholder: 'John Doe' },
+                                    { label: 'Email Address', type: 'email', placeholder: 'john@example.com' },
+                                    { label: 'Subject', type: 'text', placeholder: 'Custom order inquiry…' },
+                                ].map((field, i) => (
+                                    <div key={i}>
+                                        <label className="block text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--brand-muted)' }}>{field.label}</label>
+                                        <input required type={field.type} placeholder={field.placeholder} className="input-base w-full" />
+                                    </div>
+                                ))}
+                                <div>
+                                    <label className="block text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--brand-muted)' }}>Message</label>
+                                    <textarea required rows={5} placeholder="Tell us how we can help…" className="input-base w-full resize-none" />
+                                </div>
+                                <button type="submit" disabled={sending}
+                                    className="btn-primary w-full py-4 text-base disabled:opacity-60 disabled:cursor-not-allowed">
+                                    {sending ? 'Sending…' : <><FiSend size={16} /> Send Message</>}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
                     {/* CONTACT INFO */}
-                    <div className="space-y-10 animate-slide-up delay-100 lg:order-1">
+                    <div className="space-y-10 animate-slide-up delay-200 lg:order-1">
                         <div className="space-y-4">
                             {contactCards.map((c, i) => (
                                 <a key={i} href={c.href || '#'} className={`flex items-start gap-5 p-5 rounded-2xl border transition-all duration-200 group ${c.href ? 'cursor-pointer' : ''}`}
@@ -94,33 +121,6 @@ const Contact = () => {
                             <iframe src="https://maps.google.com/maps?q=7.907996,79.801420&hl=en&z=15&output=embed"
                                 width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy"
                                 referrerPolicy="no-referrer-when-downgrade" title="HomeHeartCreation Location" />
-                        </div>
-                    </div>
-
-                    {/* FORM */}
-                    <div className="animate-slide-up delay-200 lg:order-2">
-                        <div className="glass-card p-8 md:p-10 rounded-3xl">
-                            <h3 className="font-serif font-semibold text-2xl mb-8" style={{ color: 'var(--brand-dark)' }}>Send Us a Message</h3>
-                            <form onSubmit={handleSubmit} className="space-y-5">
-                                {[
-                                    { label: 'Your Name', type: 'text', placeholder: 'John Doe' },
-                                    { label: 'Email Address', type: 'email', placeholder: 'john@example.com' },
-                                    { label: 'Subject', type: 'text', placeholder: 'Custom order inquiry…' },
-                                ].map((field, i) => (
-                                    <div key={i}>
-                                        <label className="block text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--brand-muted)' }}>{field.label}</label>
-                                        <input required type={field.type} placeholder={field.placeholder} className="input-base w-full" />
-                                    </div>
-                                ))}
-                                <div>
-                                    <label className="block text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--brand-muted)' }}>Message</label>
-                                    <textarea required rows={5} placeholder="Tell us how we can help…" className="input-base w-full resize-none" />
-                                </div>
-                                <button type="submit" disabled={sending}
-                                    className="btn-primary w-full py-4 text-base disabled:opacity-60 disabled:cursor-not-allowed">
-                                    {sending ? 'Sending…' : <><FiSend size={16} /> Send Message</>}
-                                </button>
-                            </form>
                         </div>
                     </div>
                 </div>
