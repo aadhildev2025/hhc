@@ -10,6 +10,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [scrolled, setScrolled] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const [searchOpen, setSearchOpen] = useState(false);
     const [searchVal, setSearchVal] = useState('');
 
@@ -22,12 +23,18 @@ const Navbar = () => {
 
     const isActive = (path) => location.pathname === path;
     const isHome = location.pathname === '/';
-    const useLightText = isHome && !scrolled;
+    const showGlass = scrolled || isMobile;
+    const useLightText = isHome && !showGlass;
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 40);
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
         window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
+        window.addEventListener('resize', handleResize, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     const handleSearch = (e) => {
@@ -44,14 +51,14 @@ const Navbar = () => {
             {/* Top Navbar */}
             <nav
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-                    scrolled
+                    showGlass
                         ? 'py-3 shadow-[0_4px_32px_rgba(28,20,16,0.10)] border-b border-brand-border'
                         : 'py-5'
                 }`}
                 style={{
-                    background: scrolled ? 'var(--brand-card-bg)' : 'transparent',
-                    backdropFilter: scrolled ? 'blur(20px)' : 'none',
-                    WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
+                    background: showGlass ? 'var(--brand-card-bg)' : 'transparent',
+                    backdropFilter: showGlass ? 'blur(20px)' : 'none',
+                    WebkitBackdropFilter: showGlass ? 'blur(20px)' : 'none',
                 }}
             >
                 <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">

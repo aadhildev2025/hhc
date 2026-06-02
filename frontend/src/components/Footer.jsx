@@ -141,8 +141,15 @@ const Footer = () => {
                     <p className="text-xs" style={{ color: 'rgba(245,237,228,0.35)' }}>
                         © 2026 HomeHeartCreation. All rights reserved.
                     </p>
-                    <p className="text-xs flex items-center gap-1" style={{ color: 'rgba(245,237,228,0.35)' }}>
-                        Crafted with <span style={{ color: 'var(--brand-rose)' }}>♥</span> in Sri Lanka
+                    <p className="text-xs flex items-center gap-1.5" style={{ color: 'rgba(245,237,228,0.35)' }}>
+                        Crafted with <span style={{ color: 'var(--brand-rose)' }}>♥</span> | Powered by{' '}
+                        <a href="https://www.devlooptechsl.com" target="_blank" rel="noopener noreferrer"
+                            className="font-semibold transition-colors"
+                            style={{ color: 'var(--brand-rose)' }}
+                            onMouseEnter={e => e.currentTarget.style.color = 'var(--brand-rose-light)'}
+                            onMouseLeave={e => e.currentTarget.style.color = 'var(--brand-rose)'}>
+                            DevLoop
+                        </a>
                     </p>
                 </div>
             </div>

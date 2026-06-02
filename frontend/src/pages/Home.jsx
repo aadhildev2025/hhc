@@ -53,9 +53,11 @@ const Home = () => {
             <SEO title="Home" description="Welcome to HomeHeartCreation. Discover handcrafted treasures, wall art, and personalized gifts made with love in Sri Lanka." />
 
             {/* HERO */}
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+            <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: '#1c1410' }}>
                 <div className="absolute inset-0">
-                    <img src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&q=80&w=1800" alt="Hero" className="w-full h-full object-cover" />
+                    <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=1800"
+                        alt="Hero" className="w-full h-full object-cover"
+                        onError={e => { e.target.src = 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1800'; }} />
                     <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(28,20,16,0.78) 0%, rgba(28,20,16,0.35) 60%, rgba(201,123,94,0.15) 100%)' }} />
                 </div>
                 <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-24 w-full">
