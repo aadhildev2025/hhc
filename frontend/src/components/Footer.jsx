@@ -15,7 +15,7 @@ const Footer = () => {
     ];
 
     return (
-        <footer style={{ background: 'var(--brand-dark)', color: 'rgba(245,237,228,0.75)' }}
+        <footer style={{ background: 'var(--brand-footer-bg)', color: 'rgba(245,237,228,0.75)' }}
             className="pt-20 pb-28 md:pb-12 px-6 md:px-12">
             {/* Top divider accent */}
             <div className="max-w-7xl mx-auto">
